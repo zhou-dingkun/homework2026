@@ -1,0 +1,11 @@
+/home/zdk/ckyf/homework2026/build/CMakeFiles/uninstall.dir
+/home/zdk/ckyf/homework2026/build/CMakeFiles/cilent_uninstall.dir
+/home/zdk/ckyf/homework2026/build/CMakeFiles/kalman_filter.dir
+/home/zdk/ckyf/homework2026/build/CMakeFiles/image_processor.dir
+/home/zdk/ckyf/homework2026/build/CMakeFiles/test.dir
+/home/zdk/ckyf/homework2026/build/CMakeFiles/edit_cache.dir
+/home/zdk/ckyf/homework2026/build/CMakeFiles/rebuild_cache.dir
+/home/zdk/ckyf/homework2026/build/CMakeFiles/list_install_components.dir
+/home/zdk/ckyf/homework2026/build/CMakeFiles/install.dir
+/home/zdk/ckyf/homework2026/build/CMakeFiles/install/local.dir
+/home/zdk/ckyf/homework2026/build/CMakeFiles/install/strip.dir
