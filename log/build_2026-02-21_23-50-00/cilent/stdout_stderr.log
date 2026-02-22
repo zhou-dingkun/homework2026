@@ -1,0 +1,65 @@
+-- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found rclcpp: 16.0.17 (/opt/ros/humble/share/rclcpp/cmake)
+-- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 6.2.9 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Found sensor_msgs: 4.9.0 (/opt/ros/humble/share/sensor_msgs/cmake)
+-- Found cv_bridge: 3.2.1 (/opt/ros/humble/share/cv_bridge/cmake)
+-- Found image_transport: 3.1.12 (/opt/ros/humble/share/image_transport/cmake)
+-- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+-- Added test 'cppcheck' to perform static code analysis on C / C++ code
+-- Configured cppcheck include dirs: $<BUILD_INTERFACE:/home/zdk/ckyf/homework2026/cilent/include>
+-- Configured cppcheck exclude dirs and/or files: 
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'uncrustify' to check C / C++ code style
+-- Configured uncrustify additional arguments: 
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/zdk/ckyf/homework2026/build/cilent
+[35m[1mConsolidate compiler generated dependencies of target serial_sender[0m
+[35m[1mConsolidate compiler generated dependencies of target kalman_filter[0m
+[35m[1mConsolidate compiler generated dependencies of target image_processor[0m
+[ 25%] Built target serial_sender
+[ 50%] Built target kalman_filter
+[ 75%] Built target image_processor
+[35m[1mConsolidate compiler generated dependencies of target cilent_main[0m
+[ 87%] [32m[1mLinking CXX executable cilent_main[0m
+[100%] Built target cilent_main
+-- Install configuration: ""
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/lib/libkalman_filter.a
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/include
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/include/cilent
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/include/cilent/serial_sender.h
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/include/cilent/kalman_filter.h
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/include/cilent/image_processor.h
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/library_path.sh
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/library_path.dsv
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/lib/libimage_processor.a
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/lib/libserial_sender.a
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/lib/cilent/cilent_main
+-- Set runtime path of "/home/zdk/ckyf/homework2026/install/cilent/lib/cilent/cilent_main" to ""
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/ament_index/resource_index/package_run_dependencies/cilent
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/ament_index/resource_index/parent_prefix_path/cilent
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/ament_prefix_path.sh
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/ament_prefix_path.dsv
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/path.sh
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/path.dsv
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/local_setup.bash
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/local_setup.sh
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/local_setup.zsh
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/local_setup.dsv
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/package.dsv
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/ament_index/resource_index/packages/cilent
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/export_cilentExport.cmake
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/export_cilentExport-noconfig.cmake
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/ament_cmake_export_targets-extras.cmake
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/cilentConfig.cmake
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/cilentConfig-version.cmake
+-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/package.xml

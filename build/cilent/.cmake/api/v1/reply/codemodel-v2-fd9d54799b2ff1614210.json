@@ -1,0 +1,106 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-c09712b97b8e96a62a25.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "cilent",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "cilent_main::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cilent_main-d2102b565feed35df161.json",
+					"name" : "cilent_main",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "cilent_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cilent_uninstall-4845442e8d2a1951a02d.json",
+					"name" : "cilent_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "image_processor::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-image_processor-0fd74c842d8c037a4c24.json",
+					"name" : "image_processor",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "kalman_filter::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-kalman_filter-253b5adc51e498a5662b.json",
+					"name" : "kalman_filter",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "serial_sender::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-serial_sender-9181bb746199ac9cfa29.json",
+					"name" : "serial_sender",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-dd3d8d3c7a17be1d0f6b.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/zdk/ckyf/homework2026/build/cilent",
+		"source" : "/home/zdk/ckyf/homework2026/cilent"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

@@ -25,5 +25,15 @@ set_target_properties(cilent::image_processor PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS cilent::image_processor )
 list(APPEND _IMPORT_CHECK_FILES_FOR_cilent::image_processor "${_IMPORT_PREFIX}/lib/libimage_processor.a" )
 
+# Import target "cilent::serial_sender" for configuration "Debug"
+set_property(TARGET cilent::serial_sender APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+set_target_properties(cilent::serial_sender PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX"
+  IMPORTED_LOCATION_DEBUG "${_IMPORT_PREFIX}/lib/libserial_sender.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS cilent::serial_sender )
+list(APPEND _IMPORT_CHECK_FILES_FOR_cilent::serial_sender "${_IMPORT_PREFIX}/lib/libserial_sender.a" )
+
 # Commands beyond this point should not need to know the version.
 set(CMAKE_IMPORT_FILE_VERSION)

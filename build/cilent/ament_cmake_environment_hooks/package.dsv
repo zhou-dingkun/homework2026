@@ -1,0 +1,4 @@
+source;share/cilent/local_setup.bash
+source;share/cilent/local_setup.dsv
+source;share/cilent/local_setup.sh
+source;share/cilent/local_setup.zsh

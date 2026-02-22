@@ -1,0 +1,8 @@
+In file included from [01m[K/home/zdk/ckyf/homework2026/cilent/src/main.cpp:11[m[K:
+[01m[K/home/zdk/ckyf/homework2026/cilent/include/cilent/kalman_filter.h:4:10:[m[K [01;31m[Kfatal error: [m[KEigen/Dense: 没有那个文件或目录
+    4 | #include [01;31m[K<Eigen/Dense>[m[K
+      |          [01;31m[K^~~~~~~~~~~~~[m[K
+compilation terminated.
+gmake[2]: *** [CMakeFiles/cilent_main.dir/build.make:76：CMakeFiles/cilent_main.dir/src/main.cpp.o] 错误 1
+gmake[1]: *** [CMakeFiles/Makefile2:222：CMakeFiles/cilent_main.dir/all] 错误 2
+gmake: *** [Makefile:146：all] 错误 2

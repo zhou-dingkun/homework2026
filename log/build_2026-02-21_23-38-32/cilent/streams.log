@@ -1,0 +1,48 @@
+[0.009s] Invoking command in '/home/zdk/ckyf/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/ckyf/homework2026/build/cilent -- -j32 -l32
+[0.025s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.128s] -- Found rclcpp: 16.0.17 (/opt/ros/humble/share/rclcpp/cmake)
+[0.935s] -- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.936s] -- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.939s] -- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.944s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.953s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.975s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.976s] -- Found rmw_fastrtps_cpp: 6.2.9 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[32.239s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[32.268s] -- Found sensor_msgs: 4.9.0 (/opt/ros/humble/share/sensor_msgs/cmake)
+[32.283s] -- Found cv_bridge: 3.2.1 (/opt/ros/humble/share/cv_bridge/cmake)
+[32.288s] -- Found image_transport: 3.1.12 (/opt/ros/humble/share/image_transport/cmake)
+[39.918s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[39.962s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[39.962s] -- Configured cppcheck include dirs: $<BUILD_INTERFACE:/home/zdk/ckyf/homework2026/cilent/include>
+[39.962s] -- Configured cppcheck exclude dirs and/or files: 
+[39.962s] -- Added test 'lint_cmake' to check CMake code style
+[39.963s] -- Added test 'uncrustify' to check C / C++ code style
+[39.963s] -- Configured uncrustify additional arguments: 
+[39.963s] -- Added test 'xmllint' to check XML markup files
+[39.963s] -- Configuring done
+[39.977s] -- Generating done
+[39.982s] -- Build files have been written to: /home/zdk/ckyf/homework2026/build/cilent
+[40.000s] [35m[1mConsolidate compiler generated dependencies of target kalman_filter[0m
+[40.000s] [35m[1mConsolidate compiler generated dependencies of target image_processor[0m
+[40.000s] [35m[1mConsolidate compiler generated dependencies of target serial_sender[0m
+[40.008s] [ 25%] Built target serial_sender
+[40.012s] [ 75%] Built target image_processor
+[40.012s] [ 75%] Built target kalman_filter
+[40.025s] [ 87%] [32mBuilding CXX object CMakeFiles/cilent_main.dir/src/main.cpp.o[0m
+[43.018s] [100%] [32m[1mLinking CXX executable cilent_main[0m
+[44.306s] /usr/bin/ld: CMakeFiles/cilent_main.dir/src/main.cpp.o: in function `cilent::AutoAimNode::AutoAimNode(rclcpp::NodeOptions const&)':
+[44.306s] main.cpp:(.text._ZN6cilent11AutoAimNodeC2ERKN6rclcpp11NodeOptionsE[_ZN6cilent11AutoAimNodeC5ERKN6rclcpp11NodeOptionsE]+0x80d): undefined reference to `cilent::KalmanFilterCV2D::KalmanFilterCV2D(double, double, double)'
+[44.306s] /usr/bin/ld: CMakeFiles/cilent_main.dir/src/main.cpp.o: in function `cilent::AutoAimNode::onImage(std::shared_ptr<sensor_msgs::msg::Image_<std::allocator<void> > >)':
+[44.306s] main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xb13): undefined reference to `cilent::KalmanFilterCV2D::reset(double, double, double, double)'
+[44.307s] /usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xbcb): undefined reference to `cilent::KalmanFilterCV2D::setDeltaT(double)'
+[44.307s] /usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xbf4): undefined reference to `cilent::KalmanFilterCV2D::setProcessNoise(double)'
+[44.307s] /usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xc1d): undefined reference to `cilent::KalmanFilterCV2D::setMeasurementNoise(double)'
+[44.307s] /usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xc32): undefined reference to `cilent::KalmanFilterCV2D::predict()'
+[44.307s] /usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xc6e): undefined reference to `cilent::KalmanFilterCV2D::update(double, double)'
+[44.307s] /usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xcc1): undefined reference to `cilent::KalmanFilterCV2D::predictAhead(double) const'
+[44.350s] collect2: error: ld returned 1 exit status
+[44.352s] gmake[2]: *** [CMakeFiles/cilent_main.dir/build.make:234：cilent_main] 错误 1
+[44.352s] gmake[1]: *** [CMakeFiles/Makefile2:222：CMakeFiles/cilent_main.dir/all] 错误 2
+[44.352s] gmake: *** [Makefile:146：all] 错误 2
+[44.354s] Invoked command in '/home/zdk/ckyf/homework2026/build/cilent' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/ckyf/homework2026/build/cilent -- -j32 -l32

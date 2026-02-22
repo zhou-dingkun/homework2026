@@ -52,6 +52,32 @@ install(TARGETS image_processor
   RUNTIME DESTINATION bin
 )
 
+add_library(serial_sender src/serial_sender.cpp)
+target_include_directories(serial_sender PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+install(TARGETS serial_sender
+  EXPORT export_${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+add_executable(cilent_main src/main.cpp)
+target_include_directories(cilent_main PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+ament_target_dependencies(cilent_main rclcpp sensor_msgs cv_bridge)
+target_link_libraries(cilent_main image_processor serial_sender kalman_filter
+  Eigen3::Eigen)
+
+install(TARGETS cilent_main
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights

@@ -1,0 +1,19 @@
+[0.010s] Invoking command in '/home/zdk/ckyf/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/ckyf/homework2026/build/cilent -- -j32 -l32
+[0.040s] [35m[1mConsolidate compiler generated dependencies of target kalman_filter[0m
+[0.040s] [35m[1mConsolidate compiler generated dependencies of target image_processor[0m
+[0.040s] [35m[1mConsolidate compiler generated dependencies of target serial_sender[0m
+[0.048s] [ 25%] Built target serial_sender
+[0.049s] [ 50%] Built target kalman_filter
+[0.051s] [ 62%] [32mBuilding CXX object CMakeFiles/image_processor.dir/src/image_processor.cpp.o[0m
+[6.032s] [ 75%] [32m[1mLinking CXX static library libimage_processor.a[0m
+[6.119s] [ 75%] Built target image_processor
+[6.134s] [ 87%] [32mBuilding CXX object CMakeFiles/cilent_main.dir/src/main.cpp.o[0m
+[6.352s] In file included from [01m[K/home/zdk/ckyf/homework2026/cilent/src/main.cpp:11[m[K:
+[6.352s] [01m[K/home/zdk/ckyf/homework2026/cilent/include/cilent/kalman_filter.h:4:10:[m[K [01;31m[Kfatal error: [m[KEigen/Dense: 没有那个文件或目录
+[6.352s]     4 | #include [01;31m[K<Eigen/Dense>[m[K
+[6.352s]       |          [01;31m[K^~~~~~~~~~~~~[m[K
+[6.352s] compilation terminated.
+[6.354s] gmake[2]: *** [CMakeFiles/cilent_main.dir/build.make:76：CMakeFiles/cilent_main.dir/src/main.cpp.o] 错误 1
+[6.355s] gmake[1]: *** [CMakeFiles/Makefile2:222：CMakeFiles/cilent_main.dir/all] 错误 2
+[6.355s] gmake: *** [Makefile:146：all] 错误 2
+[6.357s] Invoked command in '/home/zdk/ckyf/homework2026/build/cilent' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/ckyf/homework2026/build/cilent -- -j32 -l32

@@ -1,0 +1,14 @@
+/usr/bin/ld: CMakeFiles/cilent_main.dir/src/main.cpp.o: in function `cilent::AutoAimNode::AutoAimNode(rclcpp::NodeOptions const&)':
+main.cpp:(.text._ZN6cilent11AutoAimNodeC2ERKN6rclcpp11NodeOptionsE[_ZN6cilent11AutoAimNodeC5ERKN6rclcpp11NodeOptionsE]+0x80d): undefined reference to `cilent::KalmanFilterCV2D::KalmanFilterCV2D(double, double, double)'
+/usr/bin/ld: CMakeFiles/cilent_main.dir/src/main.cpp.o: in function `cilent::AutoAimNode::onImage(std::shared_ptr<sensor_msgs::msg::Image_<std::allocator<void> > >)':
+main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xb13): undefined reference to `cilent::KalmanFilterCV2D::reset(double, double, double, double)'
+/usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xbcb): undefined reference to `cilent::KalmanFilterCV2D::setDeltaT(double)'
+/usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xbf4): undefined reference to `cilent::KalmanFilterCV2D::setProcessNoise(double)'
+/usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xc1d): undefined reference to `cilent::KalmanFilterCV2D::setMeasurementNoise(double)'
+/usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xc32): undefined reference to `cilent::KalmanFilterCV2D::predict()'
+/usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xc6e): undefined reference to `cilent::KalmanFilterCV2D::update(double, double)'
+/usr/bin/ld: main.cpp:(.text._ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE[_ZN6cilent11AutoAimNode7onImageESt10shared_ptrIN11sensor_msgs3msg6Image_ISaIvEEEE]+0xcc1): undefined reference to `cilent::KalmanFilterCV2D::predictAhead(double) const'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/cilent_main.dir/build.make:234：cilent_main] 错误 1
+gmake[1]: *** [CMakeFiles/Makefile2:222：CMakeFiles/cilent_main.dir/all] 错误 2
+gmake: *** [Makefile:146：all] 错误 2

@@ -1,0 +1,3 @@
+source;share/cilent/environment/ament_prefix_path.sh
+source;share/cilent/environment/library_path.sh
+source;share/cilent/environment/path.sh

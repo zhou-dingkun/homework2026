@@ -223,6 +223,32 @@ image_processor/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_processor.dir/build.make CMakeFiles/image_processor.dir/build
 .PHONY : image_processor/fast
 
+#=============================================================================
+# Target rules for targets named serial_sender
+
+# Build rule for target.
+serial_sender: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 serial_sender
+.PHONY : serial_sender
+
+# fast build rule for target.
+serial_sender/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial_sender.dir/build.make CMakeFiles/serial_sender.dir/build
+.PHONY : serial_sender/fast
+
+#=============================================================================
+# Target rules for targets named cilent_main
+
+# Build rule for target.
+cilent_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cilent_main
+.PHONY : cilent_main
+
+# fast build rule for target.
+cilent_main/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cilent_main.dir/build.make CMakeFiles/cilent_main.dir/build
+.PHONY : cilent_main/fast
+
 src/image_processor.o: src/image_processor.cpp.o
 .PHONY : src/image_processor.o
 
@@ -271,6 +297,54 @@ src/kalman_filter.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kalman_filter.dir/build.make CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.s
 .PHONY : src/kalman_filter.cpp.s
 
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cilent_main.dir/build.make CMakeFiles/cilent_main.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cilent_main.dir/build.make CMakeFiles/cilent_main.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cilent_main.dir/build.make CMakeFiles/cilent_main.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
+
+src/serial_sender.o: src/serial_sender.cpp.o
+.PHONY : src/serial_sender.o
+
+# target to build an object file
+src/serial_sender.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial_sender.dir/build.make CMakeFiles/serial_sender.dir/src/serial_sender.cpp.o
+.PHONY : src/serial_sender.cpp.o
+
+src/serial_sender.i: src/serial_sender.cpp.i
+.PHONY : src/serial_sender.i
+
+# target to preprocess a source file
+src/serial_sender.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial_sender.dir/build.make CMakeFiles/serial_sender.dir/src/serial_sender.cpp.i
+.PHONY : src/serial_sender.cpp.i
+
+src/serial_sender.s: src/serial_sender.cpp.s
+.PHONY : src/serial_sender.s
+
+# target to generate assembly for a file
+src/serial_sender.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial_sender.dir/build.make CMakeFiles/serial_sender.dir/src/serial_sender.cpp.s
+.PHONY : src/serial_sender.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -286,14 +360,22 @@ help:
 	@echo "... test"
 	@echo "... cilent_uninstall"
 	@echo "... uninstall"
+	@echo "... cilent_main"
 	@echo "... image_processor"
 	@echo "... kalman_filter"
+	@echo "... serial_sender"
 	@echo "... src/image_processor.o"
 	@echo "... src/image_processor.i"
 	@echo "... src/image_processor.s"
 	@echo "... src/kalman_filter.o"
 	@echo "... src/kalman_filter.i"
 	@echo "... src/kalman_filter.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
+	@echo "... src/serial_sender.o"
+	@echo "... src/serial_sender.i"
+	@echo "... src/serial_sender.s"
 .PHONY : help
 
 

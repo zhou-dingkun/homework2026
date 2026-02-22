@@ -1,0 +1,25 @@
+[01m[K/home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp:[m[K In member function ‘[01m[Kvirtual cv::Vec3d cilent::ImageProcessorNode::meanCenterColor(const cv::Mat&) const[m[K’:
+[01m[K/home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp:123:18:[m[K [01;31m[Kerror: [m[Kcould not convert ‘[01m[Kcv::mean(cv::InputArray, cv::InputArray)(cv::noArray().cv::_InputOutputArray::<anonymous>.cv::_OutputArray::<anonymous>)[m[K’ from ‘[01m[Kcv::Scalar[m[K’ {aka ‘[01m[Kcv::Scalar_<double>[m[K’} to ‘[01m[Kcv::Vec3d[m[K’ {aka ‘[01m[Kcv::Vec<double, 3>[m[K’}
+  123 |   return [01;31m[Kcv::mean(center)[m[K;
+      |          [01;31m[K~~~~~~~~^~~~~~~~[m[K
+      |                  [01;31m[K|[m[K
+      |                  [01;31m[Kcv::Scalar {aka cv::Scalar_<double>}[m[K
+[01m[K/home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp:[m[K In lambda function:
+[01m[K/home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp:173:35:[m[K [01;31m[Kerror: [m[K‘[01m[Kgreen_h_low_[m[K’ was not declared in this scope; did you mean ‘[01m[Kred_h_low1_[m[K’?
+  173 |       cv::inRange(hsv, cv::Scalar([01;31m[Kgreen_h_low_[m[K, s_min, v_min),
+      |                                   [01;31m[K^~~~~~~~~~~~[m[K
+      |                                   [32m[Kred_h_low1_[m[K
+[01m[K/home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp:174:30:[m[K [01;31m[Kerror: [m[K‘[01m[Kgreen_h_high_[m[K’ was not declared in this scope; did you mean ‘[01m[Kred_h_high1_[m[K’?
+  174 |                   cv::Scalar([01;31m[Kgreen_h_high_[m[K, 255, 255), mask);
+      |                              [01;31m[K^~~~~~~~~~~~~[m[K
+      |                              [32m[Kred_h_high1_[m[K
+[01m[K/home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp:[m[K At global scope:
+[01m[K/home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp:269:2:[m[K [01;31m[Kerror: [m[Kexpected ‘[01m[K}[m[K’ at end of input
+  269 | }
+      |  [01;31m[K^[m[K
+[01m[K/home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp:8:18:[m[K [01;36m[Knote: [m[Kto match this ‘[01m[K{[m[K’
+    8 | namespace cilent [01;36m[K{[m[K
+      |                  [01;36m[K^[m[K
+gmake[2]: *** [CMakeFiles/image_processor.dir/build.make:76：CMakeFiles/image_processor.dir/src/image_processor.cpp.o] 错误 1
+gmake[1]: *** [CMakeFiles/Makefile2:169：CMakeFiles/image_processor.dir/all] 错误 2
+gmake: *** [Makefile:146：all] 错误 2
