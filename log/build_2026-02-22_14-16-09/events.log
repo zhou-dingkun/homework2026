@@ -1,0 +1,231 @@
+[0.000000] (-) TimerEvent: {}
+[0.001236] (cilent) JobQueued: {'identifier': 'cilent', 'dependencies': OrderedDict()}
+[0.001596] (cilent) JobStarted: {'identifier': 'cilent'}
+[0.018713] (cilent) JobProgress: {'identifier': 'cilent', 'progress': 'cmake'}
+[0.020064] (cilent) JobProgress: {'identifier': 'cilent', 'progress': 'build'}
+[0.021053] (cilent) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/zdk/ckyf/homework2026/build/cilent', '--', '-j32', '-l32'], 'cwd': '/home/zdk/ckyf/homework2026/build/cilent', 'env': OrderedDict([('PYTHON_BASIC_REPL', '1'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'root'), ('GIT_ASKPASS', '/root/.vscode-server/bin/b6a47e94e326b5c209d118cf0f994d6065585705/extensions/git/dist/askpass.sh'), ('SHLVL', '2'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/root'), ('OLDPWD', '/home/zdk/ckyf/homework2026'), ('TERM_PROGRAM_VERSION', '1.109.3'), ('VSCODE_IPC_HOOK_CLI', '/run/user/0/vscode-ipc-5c2e1d1c-cf8e-499e-b965-7f12869eea9b.sock'), ('ROS_PYTHON_VERSION', '3'), ('VSCODE_GIT_ASKPASS_MAIN', '/root/.vscode-server/bin/b6a47e94e326b5c209d118cf0f994d6065585705/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/root/.vscode-server/bin/b6a47e94e326b5c209d118cf0f994d6065585705/node'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/0/bus'), ('COLORTERM', 'truecolor'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'root'), ('NAME', 'zdklaptop'), ('WSL_INTEROP', '/run/WSL/515_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm-256color'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/root/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/root/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/root/.vscode-server/bin/b6a47e94e326b5c209d118cf0f994d6065585705/bin/remote-cli:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin/x64:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin:/mnt/d/Program Files/Creo2.0/MKS Toolkit/bin64:/mnt/d/Program Files/Creo2.0/MKS Toolkit/bin:/mnt/d/Program Files/Creo2.0/MKS Toolkit/bin/X11:/mnt/d/Program Files/Creo2.0/MKS Toolkit/mksnt:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR:/mnt/c/Users/zdk/AppData/Roaming/.minecraft/runtime/java-runtime-delta/bin:/mnt/d/Windows Kits/10/Windows Performance Toolkit/:/mnt/d/Program Files/msys2/ucrt64/bin:/mnt/d/Program Files/MathWorks/runtime/win64:/mnt/d/Program Files/MathWorks/bin:/mnt/d/Program Files/nodejs/:/mnt/c/Users/zdk/AppData/Local/Packages/18184wherewhere.AndroidAppInstaller_4v4sx105x6y4r/LocalState/platform-tools:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Program Files/NVIDIA Corporation/Nsight Compute 2025.3.1/:/mnt/c/Program Files (x86)/Microsoft SQL Server/160/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/160/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/160/DTS/Binn/:/mnt/c/Program Files (x86)/Windows Kits/8.1/Windows Performance Toolkit/:/mnt/c/Program Files/Microsoft VS Code/bin:/mnt/e/Git/cmd:/mnt/e/matlabr2022b/runtime/win64:/mnt/e/matlabr2022b/bin:/mnt/e/CMake/bin:/mnt/c/Users/zdk/.cargo/bin:/mnt/c/Users/zdk/AppData/Local/pnpm:/mnt/c/Users/zdk/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/zdk/.dotnet/tools:/mnt/c/Users/zdk/.lmstudio/bin:/mnt/d/Program Files/Microsoft VS Code/bin:/mnt/c/Users/zdk/AppData/Roaming/npm:/mnt/d/Qt/6.10.0/mingw_64/bin:/mnt/d/ffmpeg-8.0.1-full_build/bin:/mnt/c/Users/zdk/AppData/Local/Packages/PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0/LocalCache/local-packages/Python313/Scripts:/mnt/e/JetBrain/CLion 2025.3.1.1/bin:/mnt/e/MinGW/bin:/mnt/c/Users/zdk/AppData/Local/Microsoft/WinGet/Links:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/0/'), ('DISPLAY', ':0'), ('LANG', 'zh_CN.UTF-8'), ('PYTHONSTARTUP', '/root/.vscode-server/data/User/workspaceStorage/c79221ee2f7495e08eac3ea66e71f146/ms-python.python/pythonrc.py'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/0/vscode-git-014e189367.sock'), ('TERM_PROGRAM', 'vscode'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('PWD', '/home/zdk/ckyf/homework2026/build/cilent'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', 'VSCODE_WSL_EXT_LOCATION/up'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.098757] (-) TimerEvent: {}
+[0.199340] (-) TimerEvent: {}
+[0.199847] (cilent) StdoutLine: {'line': b'[ 50%] Built target serial_sender\n'}
+[0.200168] (cilent) StdoutLine: {'line': b'[ 50%] Built target kalman_filter\n'}
+[0.204809] (cilent) StdoutLine: {'line': b'[ 62%] \x1b[32mBuilding CXX object CMakeFiles/image_processor.dir/src/image_processor.cpp.o\x1b[0m\n'}
+[0.299448] (-) TimerEvent: {}
+[0.399848] (-) TimerEvent: {}
+[0.500225] (-) TimerEvent: {}
+[0.600646] (-) TimerEvent: {}
+[0.701140] (-) TimerEvent: {}
+[0.801550] (-) TimerEvent: {}
+[0.902214] (-) TimerEvent: {}
+[1.002837] (-) TimerEvent: {}
+[1.103226] (-) TimerEvent: {}
+[1.203576] (-) TimerEvent: {}
+[1.303981] (-) TimerEvent: {}
+[1.404323] (-) TimerEvent: {}
+[1.504854] (-) TimerEvent: {}
+[1.605450] (-) TimerEvent: {}
+[1.705964] (-) TimerEvent: {}
+[1.806514] (-) TimerEvent: {}
+[1.906929] (-) TimerEvent: {}
+[2.007263] (-) TimerEvent: {}
+[2.107675] (-) TimerEvent: {}
+[2.208125] (-) TimerEvent: {}
+[2.308661] (-) TimerEvent: {}
+[2.409220] (-) TimerEvent: {}
+[2.509738] (-) TimerEvent: {}
+[2.610263] (-) TimerEvent: {}
+[2.710862] (-) TimerEvent: {}
+[2.811308] (-) TimerEvent: {}
+[2.911791] (-) TimerEvent: {}
+[3.012353] (-) TimerEvent: {}
+[3.112998] (-) TimerEvent: {}
+[3.213435] (-) TimerEvent: {}
+[3.313824] (-) TimerEvent: {}
+[3.414175] (-) TimerEvent: {}
+[3.514587] (-) TimerEvent: {}
+[3.615022] (-) TimerEvent: {}
+[3.715371] (-) TimerEvent: {}
+[3.815801] (-) TimerEvent: {}
+[3.916433] (-) TimerEvent: {}
+[4.016912] (-) TimerEvent: {}
+[4.117380] (-) TimerEvent: {}
+[4.217987] (-) TimerEvent: {}
+[4.318643] (-) TimerEvent: {}
+[4.419101] (-) TimerEvent: {}
+[4.519714] (-) TimerEvent: {}
+[4.620299] (-) TimerEvent: {}
+[4.720666] (-) TimerEvent: {}
+[4.821084] (-) TimerEvent: {}
+[4.921529] (-) TimerEvent: {}
+[5.021857] (-) TimerEvent: {}
+[5.122366] (-) TimerEvent: {}
+[5.222714] (-) TimerEvent: {}
+[5.323096] (-) TimerEvent: {}
+[5.423568] (-) TimerEvent: {}
+[5.523939] (-) TimerEvent: {}
+[5.624403] (-) TimerEvent: {}
+[5.724800] (-) TimerEvent: {}
+[5.825153] (-) TimerEvent: {}
+[5.925563] (-) TimerEvent: {}
+[6.026078] (-) TimerEvent: {}
+[6.126676] (-) TimerEvent: {}
+[6.227062] (-) TimerEvent: {}
+[6.327549] (-) TimerEvent: {}
+[6.428021] (-) TimerEvent: {}
+[6.528396] (-) TimerEvent: {}
+[6.628746] (-) TimerEvent: {}
+[6.729271] (-) TimerEvent: {}
+[6.829698] (-) TimerEvent: {}
+[6.930268] (-) TimerEvent: {}
+[7.030799] (-) TimerEvent: {}
+[7.131151] (-) TimerEvent: {}
+[7.231491] (-) TimerEvent: {}
+[7.331862] (-) TimerEvent: {}
+[7.432233] (-) TimerEvent: {}
+[7.532572] (-) TimerEvent: {}
+[7.633084] (-) TimerEvent: {}
+[7.733756] (-) TimerEvent: {}
+[7.834221] (-) TimerEvent: {}
+[7.934872] (-) TimerEvent: {}
+[8.035407] (-) TimerEvent: {}
+[8.135953] (-) TimerEvent: {}
+[8.236430] (-) TimerEvent: {}
+[8.336948] (-) TimerEvent: {}
+[8.437451] (-) TimerEvent: {}
+[8.537983] (-) TimerEvent: {}
+[8.638497] (-) TimerEvent: {}
+[8.739117] (-) TimerEvent: {}
+[8.839648] (-) TimerEvent: {}
+[8.940359] (-) TimerEvent: {}
+[9.040794] (-) TimerEvent: {}
+[9.141326] (-) TimerEvent: {}
+[9.241820] (-) TimerEvent: {}
+[9.342451] (-) TimerEvent: {}
+[9.443157] (-) TimerEvent: {}
+[9.543678] (-) TimerEvent: {}
+[9.644149] (-) TimerEvent: {}
+[9.744508] (-) TimerEvent: {}
+[9.844945] (-) TimerEvent: {}
+[9.945532] (-) TimerEvent: {}
+[10.045991] (-) TimerEvent: {}
+[10.146393] (-) TimerEvent: {}
+[10.246897] (-) TimerEvent: {}
+[10.347471] (-) TimerEvent: {}
+[10.447938] (-) TimerEvent: {}
+[10.548524] (-) TimerEvent: {}
+[10.649056] (-) TimerEvent: {}
+[10.671299] (cilent) StdoutLine: {'line': b'[ 75%] \x1b[32m\x1b[1mLinking CXX static library libimage_processor.a\x1b[0m\n'}
+[10.749250] (-) TimerEvent: {}
+[10.832576] (cilent) StdoutLine: {'line': b'[ 75%] Built target image_processor\n'}
+[10.849464] (-) TimerEvent: {}
+[10.851500] (cilent) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target cilent_main\x1b[0m\n'}
+[10.873510] (cilent) StdoutLine: {'line': b'[ 87%] \x1b[32mBuilding CXX object CMakeFiles/cilent_main.dir/src/main.cpp.o\x1b[0m\n'}
+[10.949645] (-) TimerEvent: {}
+[11.050356] (-) TimerEvent: {}
+[11.150880] (-) TimerEvent: {}
+[11.251465] (-) TimerEvent: {}
+[11.352033] (-) TimerEvent: {}
+[11.452518] (-) TimerEvent: {}
+[11.552887] (-) TimerEvent: {}
+[11.653426] (-) TimerEvent: {}
+[11.753938] (-) TimerEvent: {}
+[11.854396] (-) TimerEvent: {}
+[11.954852] (-) TimerEvent: {}
+[12.055167] (-) TimerEvent: {}
+[12.155511] (-) TimerEvent: {}
+[12.255935] (-) TimerEvent: {}
+[12.356458] (-) TimerEvent: {}
+[12.457021] (-) TimerEvent: {}
+[12.557549] (-) TimerEvent: {}
+[12.658023] (-) TimerEvent: {}
+[12.758510] (-) TimerEvent: {}
+[12.859154] (-) TimerEvent: {}
+[12.959640] (-) TimerEvent: {}
+[13.060125] (-) TimerEvent: {}
+[13.160632] (-) TimerEvent: {}
+[13.261038] (-) TimerEvent: {}
+[13.361511] (-) TimerEvent: {}
+[13.462063] (-) TimerEvent: {}
+[13.562535] (-) TimerEvent: {}
+[13.662884] (-) TimerEvent: {}
+[13.763347] (-) TimerEvent: {}
+[13.863868] (-) TimerEvent: {}
+[13.964501] (-) TimerEvent: {}
+[14.065034] (-) TimerEvent: {}
+[14.165494] (-) TimerEvent: {}
+[14.265983] (-) TimerEvent: {}
+[14.366360] (-) TimerEvent: {}
+[14.466784] (-) TimerEvent: {}
+[14.567412] (-) TimerEvent: {}
+[14.667791] (-) TimerEvent: {}
+[14.768214] (-) TimerEvent: {}
+[14.868595] (-) TimerEvent: {}
+[14.969106] (-) TimerEvent: {}
+[15.069642] (-) TimerEvent: {}
+[15.170193] (-) TimerEvent: {}
+[15.270634] (-) TimerEvent: {}
+[15.371197] (-) TimerEvent: {}
+[15.471690] (-) TimerEvent: {}
+[15.572135] (-) TimerEvent: {}
+[15.672674] (-) TimerEvent: {}
+[15.773234] (-) TimerEvent: {}
+[15.873724] (-) TimerEvent: {}
+[15.974397] (-) TimerEvent: {}
+[16.074859] (-) TimerEvent: {}
+[16.175517] (-) TimerEvent: {}
+[16.276094] (-) TimerEvent: {}
+[16.280766] (cilent) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable cilent_main\x1b[0m\n'}
+[16.376176] (-) TimerEvent: {}
+[16.476561] (-) TimerEvent: {}
+[16.577101] (-) TimerEvent: {}
+[16.677729] (-) TimerEvent: {}
+[16.778572] (-) TimerEvent: {}
+[16.879423] (-) TimerEvent: {}
+[16.980055] (-) TimerEvent: {}
+[17.080518] (-) TimerEvent: {}
+[17.181033] (-) TimerEvent: {}
+[17.281566] (-) TimerEvent: {}
+[17.382354] (-) TimerEvent: {}
+[17.482810] (-) TimerEvent: {}
+[17.583397] (-) TimerEvent: {}
+[17.684080] (-) TimerEvent: {}
+[17.784613] (-) TimerEvent: {}
+[17.838164] (cilent) StdoutLine: {'line': b'[100%] Built target cilent_main\n'}
+[17.853631] (cilent) CommandEnded: {'returncode': 0}
+[17.857630] (cilent) JobProgress: {'identifier': 'cilent', 'progress': 'install'}
+[17.867016] (cilent) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/zdk/ckyf/homework2026/build/cilent'], 'cwd': '/home/zdk/ckyf/homework2026/build/cilent', 'env': OrderedDict([('PYTHON_BASIC_REPL', '1'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'root'), ('GIT_ASKPASS', '/root/.vscode-server/bin/b6a47e94e326b5c209d118cf0f994d6065585705/extensions/git/dist/askpass.sh'), ('SHLVL', '2'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/root'), ('OLDPWD', '/home/zdk/ckyf/homework2026'), ('TERM_PROGRAM_VERSION', '1.109.3'), ('VSCODE_IPC_HOOK_CLI', '/run/user/0/vscode-ipc-5c2e1d1c-cf8e-499e-b965-7f12869eea9b.sock'), ('ROS_PYTHON_VERSION', '3'), ('VSCODE_GIT_ASKPASS_MAIN', '/root/.vscode-server/bin/b6a47e94e326b5c209d118cf0f994d6065585705/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/root/.vscode-server/bin/b6a47e94e326b5c209d118cf0f994d6065585705/node'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/0/bus'), ('COLORTERM', 'truecolor'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'root'), ('NAME', 'zdklaptop'), ('WSL_INTEROP', '/run/WSL/515_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm-256color'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/root/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/root/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/root/.vscode-server/bin/b6a47e94e326b5c209d118cf0f994d6065585705/bin/remote-cli:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin/x64:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.0/bin:/mnt/d/Program Files/Creo2.0/MKS Toolkit/bin64:/mnt/d/Program Files/Creo2.0/MKS Toolkit/bin:/mnt/d/Program Files/Creo2.0/MKS Toolkit/bin/X11:/mnt/d/Program Files/Creo2.0/MKS Toolkit/mksnt:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR:/mnt/c/Users/zdk/AppData/Roaming/.minecraft/runtime/java-runtime-delta/bin:/mnt/d/Windows Kits/10/Windows Performance Toolkit/:/mnt/d/Program Files/msys2/ucrt64/bin:/mnt/d/Program Files/MathWorks/runtime/win64:/mnt/d/Program Files/MathWorks/bin:/mnt/d/Program Files/nodejs/:/mnt/c/Users/zdk/AppData/Local/Packages/18184wherewhere.AndroidAppInstaller_4v4sx105x6y4r/LocalState/platform-tools:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Program Files/NVIDIA Corporation/Nsight Compute 2025.3.1/:/mnt/c/Program Files (x86)/Microsoft SQL Server/160/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/160/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/160/DTS/Binn/:/mnt/c/Program Files (x86)/Windows Kits/8.1/Windows Performance Toolkit/:/mnt/c/Program Files/Microsoft VS Code/bin:/mnt/e/Git/cmd:/mnt/e/matlabr2022b/runtime/win64:/mnt/e/matlabr2022b/bin:/mnt/e/CMake/bin:/mnt/c/Users/zdk/.cargo/bin:/mnt/c/Users/zdk/AppData/Local/pnpm:/mnt/c/Users/zdk/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/zdk/.dotnet/tools:/mnt/c/Users/zdk/.lmstudio/bin:/mnt/d/Program Files/Microsoft VS Code/bin:/mnt/c/Users/zdk/AppData/Roaming/npm:/mnt/d/Qt/6.10.0/mingw_64/bin:/mnt/d/ffmpeg-8.0.1-full_build/bin:/mnt/c/Users/zdk/AppData/Local/Packages/PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0/LocalCache/local-packages/Python313/Scripts:/mnt/e/JetBrain/CLion 2025.3.1.1/bin:/mnt/e/MinGW/bin:/mnt/c/Users/zdk/AppData/Local/Microsoft/WinGet/Links:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/0/'), ('DISPLAY', ':0'), ('LANG', 'zh_CN.UTF-8'), ('PYTHONSTARTUP', '/root/.vscode-server/data/User/workspaceStorage/c79221ee2f7495e08eac3ea66e71f146/ms-python.python/pythonrc.py'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/0/vscode-git-014e189367.sock'), ('TERM_PROGRAM', 'vscode'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('PWD', '/home/zdk/ckyf/homework2026/build/cilent'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', 'VSCODE_WSL_EXT_LOCATION/up'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[17.877837] (cilent) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[17.878558] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/lib/libkalman_filter.a\n'}
+[17.878735] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/include\n'}
+[17.878938] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/include/cilent\n'}
+[17.879266] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/include/cilent/serial_sender.h\n'}
+[17.879423] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/include/cilent/kalman_filter.h\n'}
+[17.879622] (cilent) StdoutLine: {'line': b'-- Installing: /home/zdk/ckyf/homework2026/install/cilent/include/cilent/image_processor.h\n'}
+[17.879846] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/library_path.sh\n'}
+[17.880188] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/library_path.dsv\n'}
+[17.880271] (cilent) StdoutLine: {'line': b'-- Installing: /home/zdk/ckyf/homework2026/install/cilent/lib/libimage_processor.a\n'}
+[17.884814] (-) TimerEvent: {}
+[17.902414] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/lib/libserial_sender.a\n'}
+[17.905241] (cilent) StdoutLine: {'line': b'-- Installing: /home/zdk/ckyf/homework2026/install/cilent/lib/cilent/cilent_main\n'}
+[17.914211] (cilent) StdoutLine: {'line': b'-- Set runtime path of "/home/zdk/ckyf/homework2026/install/cilent/lib/cilent/cilent_main" to ""\n'}
+[17.914704] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/ament_index/resource_index/package_run_dependencies/cilent\n'}
+[17.915475] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/ament_index/resource_index/parent_prefix_path/cilent\n'}
+[17.915565] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/ament_prefix_path.sh\n'}
+[17.915606] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/ament_prefix_path.dsv\n'}
+[17.915640] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/path.sh\n'}
+[17.915683] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/environment/path.dsv\n'}
+[17.915715] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/local_setup.bash\n'}
+[17.915747] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/local_setup.sh\n'}
+[17.915778] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/local_setup.zsh\n'}
+[17.915807] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/local_setup.dsv\n'}
+[17.915838] (cilent) StdoutLine: {'line': b'-- Installing: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/package.dsv\n'}
+[17.916486] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/ament_index/resource_index/packages/cilent\n'}
+[17.917173] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/export_cilentExport.cmake\n'}
+[17.917590] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/export_cilentExport-noconfig.cmake\n'}
+[17.917713] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/ament_cmake_export_targets-extras.cmake\n'}
+[17.918028] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/ament_cmake_export_dependencies-extras.cmake\n'}
+[17.918334] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/cilentConfig.cmake\n'}
+[17.918402] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/cmake/cilentConfig-version.cmake\n'}
+[17.918440] (cilent) StdoutLine: {'line': b'-- Up-to-date: /home/zdk/ckyf/homework2026/install/cilent/share/cilent/package.xml\n'}
+[17.920788] (cilent) CommandEnded: {'returncode': 0}
+[17.955234] (cilent) JobEnded: {'identifier': 'cilent', 'rc': 0}
+[17.956781] (-) EventReactorShutdown: {}

@@ -18,7 +18,9 @@ class AutoAimNode : public ImageProcessorNode {
 	explicit AutoAimNode(const rclcpp::NodeOptions &options =
 													 rclcpp::NodeOptions())
 		: ImageProcessorNode(options),
-			sender_("/dev/pts/8"),
+			serial_device_(declare_parameter<std::string>("serial_device",
+														 "/dev/pts/8")),
+			sender_(serial_device_),
 			yaw_fov_deg_(declare_parameter<double>("yaw_fov_deg", 90.0)),
 			fire_x_tol_px_(declare_parameter<int>("fire_x_tol_px", 10)),
 			fire_cooldown_ms_(declare_parameter<int>("fire_cooldown_ms", 250)),
@@ -36,7 +38,7 @@ class AutoAimNode : public ImageProcessorNode {
 			kf_initialized_(false) {
 		if (!sender_.open()) {
 			RCLCPP_WARN(get_logger(), "Failed to open serial device %s",
-									"/dev/pts/8");
+								serial_device_.c_str());
 		}
 	}
 
@@ -166,6 +168,7 @@ class AutoAimNode : public ImageProcessorNode {
 	}
 
  private:
+	std::string serial_device_;
 	SerialSender sender_;
 	double yaw_fov_deg_;
 	int fire_x_tol_px_;

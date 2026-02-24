@@ -1,8 +1,12 @@
 #include "cilent/image_processor.h"
 
 #include <algorithm>
+#include <filesystem>
+#include <iomanip>
+#include <sstream>
 #include <vector>
 
+#include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 
 namespace cilent {
@@ -30,6 +34,32 @@ ImageProcessorNode::ImageProcessorNode(const rclcpp::NodeOptions &options)
   pair_y_tol_ = declare_parameter<int>("pair_y_tol", 10);
   pair_min_dx_ = declare_parameter<int>("pair_min_dx", 50);
   bbox_pad_ = declare_parameter<int>("bbox_pad", 6);
+  debug_save_path_ =
+    declare_parameter<std::string>("debug_save_path",
+                                   "center_color_overlay.png");
+  debug_save_interval_ms_ =
+    declare_parameter<int>("debug_save_interval_ms", 500);
+  debug_save_overlay_ = declare_parameter<bool>("debug_save_overlay", true);
+  last_debug_save_time_ = rclcpp::Time(0, 0, RCL_STEADY_TIME);
+  debug_save_frames_ = declare_parameter<bool>("debug_save_frames", true);
+  debug_frames_dir_ =
+    declare_parameter<std::string>("debug_frames_dir", "frames");
+  debug_frames_interval_ms_ =
+    declare_parameter<int>("debug_frames_interval_ms", 100);
+  debug_frame_index_ = 0;
+  last_debug_frame_time_ = rclcpp::Time(0, 0, RCL_STEADY_TIME);
+
+  std::filesystem::path frames_path(debug_frames_dir_);
+  if (frames_path.is_relative()) {
+    frames_path = std::filesystem::current_path() / frames_path;
+  }
+  debug_frames_dir_resolved_ = frames_path.string();
+
+  RCLCPP_INFO(get_logger(),
+              "Debug frames: enabled=%s dir=%s interval_ms=%d",
+              debug_save_frames_ ? "true" : "false",
+              debug_frames_dir_resolved_.c_str(),
+              debug_frames_interval_ms_);
 
   sub_ = create_subscription<sensor_msgs::msg::Image>(
     "image_raw", rclcpp::SensorDataQoS(),
@@ -70,9 +100,65 @@ void ImageProcessorNode::onImage(
   }
 
   cv::Mat roi = frame(crop);
-  const cv::Vec3d mean_bgr = meanCenterColor(roi);
+  const cv::Vec3d mean_bgr = meanCenterColor(frame);
   const std::string color = classifyColor(mean_bgr);
   DetectionResult detection = detectTarget(roi, color);
+
+  if (debug_save_frames_) {
+    rclcpp::Clock steady_clock(RCL_STEADY_TIME);
+    const rclcpp::Time now = steady_clock.now();
+    const bool due =
+      debug_frames_interval_ms_ <= 0 ||
+      (now - last_debug_frame_time_).nanoseconds() >=
+        static_cast<int64_t>(debug_frames_interval_ms_) * 1000000LL;
+    if (due) {
+      std::error_code ec;
+      std::filesystem::create_directories(debug_frames_dir_resolved_, ec);
+      if (ec) {
+        RCLCPP_WARN(get_logger(), "Failed to create debug frame dir %s: %s",
+                    debug_frames_dir_resolved_.c_str(),
+                    ec.message().c_str());
+      } else {
+        std::ostringstream name;
+        name << debug_frames_dir_resolved_ << "/frame_"
+             << std::setfill('0')
+             << std::setw(6) << debug_frame_index_++ << ".png";
+        if (!cv::imwrite(name.str(), frame)) {
+          RCLCPP_WARN(get_logger(), "Failed to write debug frame to %s",
+                      name.str().c_str());
+        } else {
+          RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
+                               "Saved debug frame to %s",
+                               name.str().c_str());
+        }
+      }
+      last_debug_frame_time_ = now;
+    }
+  }
+
+  if (debug_save_overlay_) {
+    rclcpp::Clock steady_clock(RCL_STEADY_TIME);
+    const rclcpp::Time now = steady_clock.now();
+    const bool due =
+      (now - last_debug_save_time_).nanoseconds() >=
+      static_cast<int64_t>(debug_save_interval_ms_) * 1000000LL;
+    if (due) {
+      cv::Mat debug_frame = frame.clone();
+      const cv::Rect sample_rect = sampleRect(frame);
+      if (sample_rect.area() > 0) {
+        cv::rectangle(debug_frame, sample_rect, cv::Scalar(0, 255, 0), 2);
+      }
+      if (!cv::imwrite(debug_save_path_, debug_frame)) {
+        RCLCPP_WARN(get_logger(), "Failed to write debug overlay to %s",
+                    debug_save_path_.c_str());
+      } else {
+        RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
+                             "Saved debug overlay to %s",
+                             debug_save_path_.c_str());
+      }
+      last_debug_save_time_ = now;
+    }
+  }
 
   if (detection.found) {
     const float x = detection.center.x + static_cast<float>(crop.x);
@@ -106,22 +192,39 @@ cv::Rect ImageProcessorNode::computeCropRect(int width, int height) const {
   return cv::Rect(x, y, crop_w, crop_h);
 }
 
-cv::Vec3d ImageProcessorNode::meanCenterColor(const cv::Mat &roi) const {
-  const int w = roi.cols;
-  const int h = roi.rows;
-  const int half = std::max(1, center_window_ / 2);
+cv::Vec3d ImageProcessorNode::meanCenterColor(const cv::Mat &frame) const {
+  if (frame.empty()) {
+    return cv::Vec3d(0.0, 0.0, 0.0);
+  }
+  const cv::Rect sample_rect = sampleRect(frame);
+  if (sample_rect.area() <= 0) {
+    return cv::Vec3d(0.0, 0.0, 0.0);
+  }
 
-  const int cx = w / 2;
-  const int cy = h / 2;
-  const int x0 = std::clamp(cx - half, 0, w - 1);
-  const int y0 = std::clamp(cy - half, 0, h - 1);
-  const int x1 = std::clamp(cx + half, 0, w - 1);
-  const int y1 = std::clamp(cy + half, 0, h - 1);
-
-  cv::Rect center_rect(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
-  cv::Mat center = roi(center_rect);
-  const cv::Scalar mean = cv::mean(center);
+  cv::Mat sample = frame(sample_rect);
+  const cv::Scalar mean = cv::mean(sample);
   return cv::Vec3d(mean[0], mean[1], mean[2]);
+}
+
+cv::Rect ImageProcessorNode::sampleRect(const cv::Mat &frame) const {
+  if (frame.empty()) {
+    return cv::Rect();
+  }
+
+  const int sample_x = 572;
+  const int sample_y = 612;
+  const int half = 5;
+
+  const int x0 = std::clamp(sample_x - half, 0, frame.cols - 1);
+  const int y0 = std::clamp(sample_y - half, 0, frame.rows - 1);
+  const int x1 = std::clamp(sample_x + half - 1, 0, frame.cols - 1);
+  const int y1 = std::clamp(sample_y + half - 1, 0, frame.rows - 1);
+
+  if (x1 < x0 || y1 < y0) {
+    return cv::Rect();
+  }
+
+  return cv::Rect(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
 }
 
 std::string ImageProcessorNode::classifyColor(const cv::Vec3d &bgr) const {

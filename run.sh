@@ -20,12 +20,36 @@ if [[ -f install/setup.bash ]]; then
   source install/setup.bash
 fi
 
-# Start the game in background.
-"$SCRIPT_DIR/homework2026.sh" &
-GAME_PID=$!
+serial_device=""
+passthrough_args=()
 
-# Run the auto-aim node.
-ros2 run cilent cilent_main
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -s|--serial)
+      if [[ -n "${2:-}" ]]; then
+        serial_device="$2"
+        shift 2
+      else
+        echo "Error: --serial requires a device path" >&2
+        exit 1
+      fi
+      ;;
+    --)
+      shift
+      passthrough_args+=("$@")
+      break
+      ;;
+    *)
+      passthrough_args+=("$1")
+      shift
+      ;;
+  esac
+done
 
-# If the node exits, stop the game.
-kill "$GAME_PID" >/dev/null 2>&1 || true
+ros_args=()
+if [[ -n "$serial_device" ]]; then
+  ros_args+=(--ros-args -p "serial_device:=${serial_device}")
+fi
+
+# Run the auto-aim node without starting the game server.
+ros2 run cilent cilent_main "${ros_args[@]}" "${passthrough_args[@]}"

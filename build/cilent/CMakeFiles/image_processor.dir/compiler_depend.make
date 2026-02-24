@@ -753,8 +753,22 @@ CMakeFiles/image_processor.dir/src/image_processor.cpp.o: /home/zdk/ckyf/homewor
   /opt/ros/humble/include/rclcpp/rclcpp/wait_set_policies/static_storage.hpp \
   /opt/ros/humble/include/rclcpp/rclcpp/wait_set_policies/thread_safe_synchronization.hpp \
   /opt/ros/humble/include/rclcpp/rclcpp/wait_set_policies/detail/write_preferring_read_write_lock.hpp \
-  /opt/ros/humble/include/rclcpp/rclcpp/wait_set_template.hpp
+  /opt/ros/humble/include/rclcpp/rclcpp/wait_set_template.hpp \
+  /usr/include/c++/11/filesystem \
+  /usr/include/c++/11/bits/fs_fwd.h \
+  /usr/include/c++/11/bits/fs_path.h \
+  /usr/include/c++/11/bits/fs_dir.h \
+  /usr/include/c++/11/bits/fs_ops.h \
+  /usr/include/opencv4/opencv2/imgcodecs.hpp
 
+
+/usr/include/opencv4/opencv2/imgcodecs.hpp:
+
+/usr/include/c++/11/bits/fs_ops.h:
+
+/usr/include/c++/11/bits/fs_path.h:
+
+/usr/include/c++/11/filesystem:
 
 /opt/ros/humble/include/rclcpp/rclcpp/wait_set_policies/thread_safe_synchronization.hpp:
 
@@ -816,6 +830,8 @@ CMakeFiles/image_processor.dir/src/image_processor.cpp.o: /home/zdk/ckyf/homewor
 
 /opt/ros/humble/include/rclcpp/rclcpp/create_subscription.hpp:
 
+/usr/include/c++/11/bits/fs_fwd.h:
+
 /opt/ros/humble/include/rclcpp/rclcpp/create_service.hpp:
 
 /opt/ros/humble/include/rclcpp/rclcpp/node_interfaces/node_parameters_interface_traits.hpp:
@@ -849,6 +865,8 @@ CMakeFiles/image_processor.dir/src/image_processor.cpp.o: /home/zdk/ckyf/homewor
 /opt/ros/humble/include/rclcpp/rclcpp/node_interfaces/node_logging_interface.hpp:
 
 /opt/ros/humble/include/rclcpp/rclcpp/node_interfaces/node_clock_interface.hpp:
+
+/usr/include/c++/11/bits/fs_dir.h:
 
 /opt/ros/humble/include/rclcpp/rclcpp/generic_subscription.hpp:
 

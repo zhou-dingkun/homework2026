@@ -26,10 +26,11 @@ class ImageProcessorNode : public rclcpp::Node {
  protected:
   virtual void onImage(const sensor_msgs::msg::Image::SharedPtr msg);
   virtual cv::Rect computeCropRect(int width, int height) const;
-  virtual cv::Vec3d meanCenterColor(const cv::Mat &roi) const;
+  virtual cv::Vec3d meanCenterColor(const cv::Mat &frame) const;
   virtual std::string classifyColor(const cv::Vec3d &bgr) const;
   virtual DetectionResult detectTarget(const cv::Mat &roi,
                                        const std::string &preferred) const;
+  cv::Rect sampleRect(const cv::Mat &frame) const;
 
   int expected_width_;
   int expected_height_;
@@ -52,6 +53,17 @@ class ImageProcessorNode : public rclcpp::Node {
   int pair_y_tol_;
   int pair_min_dx_;
   int bbox_pad_;
+
+  std::string debug_save_path_;
+  int debug_save_interval_ms_;
+  bool debug_save_overlay_;
+  rclcpp::Time last_debug_save_time_;
+  bool debug_save_frames_;
+  std::string debug_frames_dir_;
+  std::string debug_frames_dir_resolved_;
+  int debug_frames_interval_ms_;
+  uint64_t debug_frame_index_;
+  rclcpp::Time last_debug_frame_time_;
 
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_;
 };
