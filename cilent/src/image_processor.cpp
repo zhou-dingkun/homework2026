@@ -211,9 +211,10 @@ cv::Rect ImageProcessorNode::sampleRect(const cv::Mat &frame) const {
     return cv::Rect();
   }
 
-  const int sample_x = 572;
-  const int sample_y = 612;
-  const int half = 5;
+  const int window = std::max(1, center_window_);
+  const int half = window / 2;
+  const int sample_x = frame.cols / 2;
+  const int sample_y = frame.rows - 1 - half;
 
   const int x0 = std::clamp(sample_x - half, 0, frame.cols - 1);
   const int y0 = std::clamp(sample_y - half, 0, frame.rows - 1);

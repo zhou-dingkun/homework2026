@@ -1,0 +1,4 @@
+Invoking command in '/home/zdk/ckyf/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/ckyf/homework2026/build/cilent -- -j32 -l32
+Invoked command in '/home/zdk/ckyf/homework2026/build/cilent' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/ckyf/homework2026/build/cilent -- -j32 -l32
+Invoking command in '/home/zdk/ckyf/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/zdk/ckyf/homework2026/build/cilent
+Invoked command in '/home/zdk/ckyf/homework2026/build/cilent' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/zdk/ckyf/homework2026/build/cilent
