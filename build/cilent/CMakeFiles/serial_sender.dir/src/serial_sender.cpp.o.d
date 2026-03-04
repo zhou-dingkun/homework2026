@@ -1,7 +1,7 @@
 CMakeFiles/serial_sender.dir/src/serial_sender.cpp.o: \
- /home/zdk/ckyf/homework2026/cilent/src/serial_sender.cpp \
+ /home/zdk/work/homework2026/cilent/src/serial_sender.cpp \
  /usr/include/stdc-predef.h \
- /home/zdk/ckyf/homework2026/cilent/include/cilent/serial_sender.h \
+ /home/zdk/work/homework2026/cilent/include/cilent/serial_sender.h \
  /usr/include/c++/11/string \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

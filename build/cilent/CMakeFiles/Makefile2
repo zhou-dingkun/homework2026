@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zdk/ckyf/homework2026/cilent
+CMAKE_SOURCE_DIR = /home/zdk/work/homework2026/cilent
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zdk/ckyf/homework2026/build/cilent
+CMAKE_BINARY_DIR = /home/zdk/work/homework2026/build/cilent
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -89,14 +89,14 @@ clean: CMakeFiles/cilent_main.dir/clean
 CMakeFiles/uninstall.dir/all: CMakeFiles/cilent_uninstall.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/uninstall.dir/build.make CMakeFiles/uninstall.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/uninstall.dir/build.make CMakeFiles/uninstall.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num= "Built target uninstall"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num= "Built target uninstall"
 .PHONY : CMakeFiles/uninstall.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/uninstall.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/uninstall.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 0
 .PHONY : CMakeFiles/uninstall.dir/rule
 
 # Convenience name for target.
@@ -115,14 +115,14 @@ CMakeFiles/uninstall.dir/clean:
 CMakeFiles/cilent_uninstall.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cilent_uninstall.dir/build.make CMakeFiles/cilent_uninstall.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cilent_uninstall.dir/build.make CMakeFiles/cilent_uninstall.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num= "Built target cilent_uninstall"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num= "Built target cilent_uninstall"
 .PHONY : CMakeFiles/cilent_uninstall.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cilent_uninstall.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cilent_uninstall.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 0
 .PHONY : CMakeFiles/cilent_uninstall.dir/rule
 
 # Convenience name for target.
@@ -141,14 +141,14 @@ CMakeFiles/cilent_uninstall.dir/clean:
 CMakeFiles/kalman_filter.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kalman_filter.dir/build.make CMakeFiles/kalman_filter.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kalman_filter.dir/build.make CMakeFiles/kalman_filter.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num=5,6 "Built target kalman_filter"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num=5,6 "Built target kalman_filter"
 .PHONY : CMakeFiles/kalman_filter.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/kalman_filter.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/kalman_filter.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 0
 .PHONY : CMakeFiles/kalman_filter.dir/rule
 
 # Convenience name for target.
@@ -167,14 +167,14 @@ CMakeFiles/kalman_filter.dir/clean:
 CMakeFiles/image_processor.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_processor.dir/build.make CMakeFiles/image_processor.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_processor.dir/build.make CMakeFiles/image_processor.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num=3,4 "Built target image_processor"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num=3,4 "Built target image_processor"
 .PHONY : CMakeFiles/image_processor.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/image_processor.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/image_processor.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 0
 .PHONY : CMakeFiles/image_processor.dir/rule
 
 # Convenience name for target.
@@ -193,14 +193,14 @@ CMakeFiles/image_processor.dir/clean:
 CMakeFiles/serial_sender.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial_sender.dir/build.make CMakeFiles/serial_sender.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial_sender.dir/build.make CMakeFiles/serial_sender.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num=7,8 "Built target serial_sender"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num=7,8 "Built target serial_sender"
 .PHONY : CMakeFiles/serial_sender.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/serial_sender.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/serial_sender.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 0
 .PHONY : CMakeFiles/serial_sender.dir/rule
 
 # Convenience name for target.
@@ -221,14 +221,14 @@ CMakeFiles/cilent_main.dir/all: CMakeFiles/image_processor.dir/all
 CMakeFiles/cilent_main.dir/all: CMakeFiles/serial_sender.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cilent_main.dir/build.make CMakeFiles/cilent_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/cilent_main.dir/build.make CMakeFiles/cilent_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num=1,2 "Built target cilent_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num=1,2 "Built target cilent_main"
 .PHONY : CMakeFiles/cilent_main.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cilent_main.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 8
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/cilent_main.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 0
 .PHONY : CMakeFiles/cilent_main.dir/rule
 
 # Convenience name for target.

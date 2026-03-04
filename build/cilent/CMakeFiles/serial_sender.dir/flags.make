@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/zdk/ckyf/homework2026/cilent/include
+CXX_INCLUDES = -I/home/zdk/work/homework2026/cilent/include
 
 CXX_FLAGS = -Wall -Wextra -Wpedantic
 

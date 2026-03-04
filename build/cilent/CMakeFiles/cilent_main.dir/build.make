@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zdk/ckyf/homework2026/cilent
+CMAKE_SOURCE_DIR = /home/zdk/work/homework2026/cilent
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zdk/ckyf/homework2026/build/cilent
+CMAKE_BINARY_DIR = /home/zdk/work/homework2026/build/cilent
 
 # Include any dependencies generated for this target.
 include CMakeFiles/cilent_main.dir/depend.make
@@ -70,18 +70,18 @@ include CMakeFiles/cilent_main.dir/progress.make
 include CMakeFiles/cilent_main.dir/flags.make
 
 CMakeFiles/cilent_main.dir/src/main.cpp.o: CMakeFiles/cilent_main.dir/flags.make
-CMakeFiles/cilent_main.dir/src/main.cpp.o: /home/zdk/ckyf/homework2026/cilent/src/main.cpp
+CMakeFiles/cilent_main.dir/src/main.cpp.o: /home/zdk/work/homework2026/cilent/src/main.cpp
 CMakeFiles/cilent_main.dir/src/main.cpp.o: CMakeFiles/cilent_main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/cilent_main.dir/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cilent_main.dir/src/main.cpp.o -MF CMakeFiles/cilent_main.dir/src/main.cpp.o.d -o CMakeFiles/cilent_main.dir/src/main.cpp.o -c /home/zdk/ckyf/homework2026/cilent/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/cilent_main.dir/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/cilent_main.dir/src/main.cpp.o -MF CMakeFiles/cilent_main.dir/src/main.cpp.o.d -o CMakeFiles/cilent_main.dir/src/main.cpp.o -c /home/zdk/work/homework2026/cilent/src/main.cpp
 
 CMakeFiles/cilent_main.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cilent_main.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zdk/ckyf/homework2026/cilent/src/main.cpp > CMakeFiles/cilent_main.dir/src/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zdk/work/homework2026/cilent/src/main.cpp > CMakeFiles/cilent_main.dir/src/main.cpp.i
 
 CMakeFiles/cilent_main.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cilent_main.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zdk/ckyf/homework2026/cilent/src/main.cpp -o CMakeFiles/cilent_main.dir/src/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zdk/work/homework2026/cilent/src/main.cpp -o CMakeFiles/cilent_main.dir/src/main.cpp.s
 
 # Object files for target cilent_main
 cilent_main_OBJECTS = \
@@ -95,7 +95,9 @@ cilent_main: CMakeFiles/cilent_main.dir/build.make
 cilent_main: libimage_processor.a
 cilent_main: libserial_sender.a
 cilent_main: libkalman_filter.a
-cilent_main: /opt/ros/humble/lib/libcv_bridge.so
+cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_core.so.4.5d
+cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.4.5d
+cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so.4.5d
 cilent_main: /opt/ros/humble/lib/x86_64-linux-gnu/libimage_transport.so
 cilent_main: /opt/ros/humble/lib/libsensor_msgs__rosidl_typesupport_fastrtps_c.so
 cilent_main: /opt/ros/humble/lib/libgeometry_msgs__rosidl_typesupport_fastrtps_c.so
@@ -176,62 +178,12 @@ cilent_main: /opt/ros/humble/lib/librosidl_runtime_c.so
 cilent_main: /usr/lib/x86_64-linux-gnu/libpython3.10.so
 cilent_main: /opt/ros/humble/lib/libtracetools.so
 cilent_main: /opt/ros/humble/lib/librcutils.so
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_stitching.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_alphamat.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_aruco.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_barcode.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_bgsegm.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_bioinspired.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_ccalib.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_dnn_objdetect.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_dnn_superres.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_dpm.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_face.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_freetype.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_fuzzy.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_hdf.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_hfs.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_img_hash.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_intensity_transform.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_line_descriptor.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_mcc.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_quality.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_rapid.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_reg.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_rgbd.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_saliency.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_shape.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_stereo.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_structured_light.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_phase_unwrapping.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_superres.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_optflow.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_surface_matching.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_tracking.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_highgui.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_datasets.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_plot.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_text.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_ml.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_videostab.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_videoio.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_viz.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_wechat_qrcode.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_ximgproc.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_video.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_xobjdetect.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_objdetect.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_calib3d.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_dnn.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_features2d.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_flann.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_xphoto.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_photo.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.4.5.4d
-cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_core.so.4.5.4d
+cilent_main: /opt/ros/humble/lib/libcv_bridge.so
+cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_core.so.4.5d
+cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.4.5d
+cilent_main: /usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so.4.5d
 cilent_main: CMakeFiles/cilent_main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable cilent_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable cilent_main"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/cilent_main.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -243,6 +195,6 @@ CMakeFiles/cilent_main.dir/clean:
 .PHONY : CMakeFiles/cilent_main.dir/clean
 
 CMakeFiles/cilent_main.dir/depend:
-	cd /home/zdk/ckyf/homework2026/build/cilent && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zdk/ckyf/homework2026/cilent /home/zdk/ckyf/homework2026/cilent /home/zdk/ckyf/homework2026/build/cilent /home/zdk/ckyf/homework2026/build/cilent /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles/cilent_main.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/zdk/work/homework2026/build/cilent && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zdk/work/homework2026/cilent /home/zdk/work/homework2026/cilent /home/zdk/work/homework2026/build/cilent /home/zdk/work/homework2026/build/cilent /home/zdk/work/homework2026/build/cilent/CMakeFiles/cilent_main.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/cilent_main.dir/depend
 

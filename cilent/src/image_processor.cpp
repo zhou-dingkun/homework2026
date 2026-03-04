@@ -15,9 +15,12 @@ ImageProcessorNode::ImageProcessorNode(const rclcpp::NodeOptions &options)
   : rclcpp::Node("image_processor", options) {
   expected_width_ = declare_parameter<int>("expected_width", 1152);
   expected_height_ = declare_parameter<int>("expected_height", 648);
-  crop_width_ = declare_parameter<int>("crop_width", 400);
-  crop_height_ = declare_parameter<int>("crop_height", 200);
+  crop_width_ = declare_parameter<int>("crop_width", expected_width_);
+  crop_height_ = declare_parameter<int>("crop_height", expected_height_);
   center_window_ = declare_parameter<int>("center_window", 7);
+  sample_window_ = declare_parameter<int>("sample_window", 10);
+  sample_offset_x_ = declare_parameter<int>("sample_offset_x", 0);
+  sample_offset_y_ = declare_parameter<int>("sample_offset_y", 20);
   color_delta_ = declare_parameter<int>("color_delta", 30);
 
   hsv_s_min_ = declare_parameter<int>("hsv_s_min", 60);
@@ -30,7 +33,7 @@ ImageProcessorNode::ImageProcessorNode(const rclcpp::NodeOptions &options)
   blue_h_high_ = declare_parameter<int>("blue_h_high", 135);
   morph_kernel_ = declare_parameter<int>("morph_kernel", 3);
   marker_min_area_ = declare_parameter<int>("marker_min_area", 40);
-  marker_max_area_ = declare_parameter<int>("marker_max_area", 400);
+  marker_max_area_ = declare_parameter<int>("marker_max_area", 50000);
   pair_y_tol_ = declare_parameter<int>("pair_y_tol", 10);
   pair_min_dx_ = declare_parameter<int>("pair_min_dx", 50);
   bbox_pad_ = declare_parameter<int>("bbox_pad", 6);
@@ -45,7 +48,13 @@ ImageProcessorNode::ImageProcessorNode(const rclcpp::NodeOptions &options)
   debug_frames_dir_ =
     declare_parameter<std::string>("debug_frames_dir", "frames");
   debug_frames_interval_ms_ =
-    declare_parameter<int>("debug_frames_interval_ms", 100);
+    declare_parameter<int>("debug_frames_interval_ms", 1000);
+  if (debug_frames_interval_ms_ < 1000) {
+    RCLCPP_WARN(get_logger(),
+                "debug_frames_interval_ms=%d is too small, force to 1000ms",
+                debug_frames_interval_ms_);
+    debug_frames_interval_ms_ = 1000;
+  }
   debug_frame_index_ = 0;
   last_debug_frame_time_ = rclcpp::Time(0, 0, RCL_STEADY_TIME);
 
@@ -68,8 +77,48 @@ ImageProcessorNode::ImageProcessorNode(const rclcpp::NodeOptions &options)
 
 void ImageProcessorNode::onImage(
   const sensor_msgs::msg::Image::SharedPtr msg) {
-  if (!msg) {
+  ImageContext ctx;
+  if (!buildImageContext(msg, ctx)) {
     return;
+  }
+
+  const cv::Mat &frame = ctx.cv_ptr->image;
+  const cv::Rect &crop = ctx.crop;
+  const cv::Vec3d &mean_bgr = ctx.mean_bgr;
+  const std::string &color = ctx.color;
+  const DetectionResult &detection = ctx.detection;
+
+  maybeSaveDebugImages(frame, crop, detection);
+
+  if (detection.found) {
+    const float x = detection.center.x + static_cast<float>(crop.x);
+    const float y = detection.center.y + static_cast<float>(crop.y);
+    const float y_lb = static_cast<float>(frame.rows - 1) - y;
+    RCLCPP_INFO_THROTTLE(
+      get_logger(), *get_clock(), 500,
+      "Target: %s center=(%.1f, %.1f) area=%.1f", detection.label.c_str(), x,
+      y_lb, detection.area);
+  } else {
+    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500,
+                         "Center color: %s (B=%.1f G=%.1f R=%.1f)",
+                         color.c_str(), mean_bgr[0], mean_bgr[1], mean_bgr[2]);
+  }
+}
+
+bool ImageProcessorNode::buildImageContext(
+  const sensor_msgs::msg::Image::SharedPtr &msg, ImageContext &ctx) {
+  if (!msg) {
+    return false;
+  }
+
+  const uint64_t required_bytes =
+    static_cast<uint64_t>(msg->step) * static_cast<uint64_t>(msg->height);
+  if (msg->data.size() < required_bytes) {
+    RCLCPP_ERROR_THROTTLE(
+      get_logger(), *get_clock(), 2000,
+      "Malformed image message: data.size=%zu < step*height=%llu",
+      msg->data.size(), static_cast<unsigned long long>(required_bytes));
+    return false;
   }
 
   if (msg->width != static_cast<uint32_t>(expected_width_) ||
@@ -78,7 +127,6 @@ void ImageProcessorNode::onImage(
                          "Unexpected resolution: %ux%u, expected %dx%d",
                          msg->width, msg->height, expected_width_,
                          expected_height_);
-    return;
   }
 
   cv_bridge::CvImageConstPtr cv_ptr;
@@ -86,23 +134,110 @@ void ImageProcessorNode::onImage(
     cv_ptr = cv_bridge::toCvShare(msg, "bgr8");
   } catch (const cv_bridge::Exception &ex) {
     RCLCPP_ERROR(get_logger(), "cv_bridge error: %s", ex.what());
-    return;
+    return false;
+  } catch (const cv::Exception &ex) {
+    RCLCPP_ERROR(get_logger(), "OpenCV exception in cv_bridge: %s", ex.what());
+    return false;
+  } catch (const std::exception &ex) {
+    RCLCPP_ERROR(get_logger(), "Exception in cv_bridge: %s", ex.what());
+    return false;
   }
 
   const cv::Mat &frame = cv_ptr->image;
   if (frame.empty()) {
-    return;
+    return false;
   }
 
-  cv::Rect crop = computeCropRect(frame.cols, frame.rows);
-  if (crop.width <= 0 || crop.height <= 0) {
-    return;
+  constexpr int64_t kMaxProcessPixels = 40000000LL;  // 40 MP
+  const int64_t frame_pixels =
+    static_cast<int64_t>(frame.cols) * static_cast<int64_t>(frame.rows);
+  if (frame.cols <= 0 || frame.rows <= 0 || frame_pixels <= 0) {
+    RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 2000,
+                         "Invalid cv::Mat shape: cols=%d rows=%d",
+                         frame.cols, frame.rows);
+    return false;
+  }
+  if (frame_pixels > kMaxProcessPixels) {
+    RCLCPP_ERROR_THROTTLE(
+      get_logger(), *get_clock(), 2000,
+      "Image too large: %dx%d (%lld pixels), skip to avoid OOM",
+      frame.cols, frame.rows, static_cast<long long>(frame_pixels));
+    return false;
   }
 
-  cv::Mat roi = frame(crop);
-  const cv::Vec3d mean_bgr = meanCenterColor(frame);
-  const std::string color = classifyColor(mean_bgr);
-  DetectionResult detection = detectTarget(roi, color);
+  try {
+    ctx.crop = computeCropRect(frame.cols, frame.rows);
+    if (ctx.crop.width <= 0 || ctx.crop.height <= 0) {
+      return false;
+    }
+
+    const cv::Mat roi = frame(ctx.crop);
+    ctx.mean_bgr = meanCenterColor(frame);
+    ctx.color = classifyColor(ctx.mean_bgr);
+    ctx.detection = detectTarget(roi, ctx.color);
+    ctx.cv_ptr = cv_ptr;
+  } catch (const cv::Exception &ex) {
+    RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 2000,
+                          "OpenCV exception in processing: %s", ex.what());
+    return false;
+  }
+
+  return true;
+}
+
+void ImageProcessorNode::maybeSaveDebugImages(
+  const cv::Mat &frame, const cv::Rect &crop,
+  const DetectionResult &detection) {
+  std::vector<cv::Rect> detection_rects;
+  detection_rects.reserve(detection.boxes.size());
+  for (const auto &box : detection.boxes) {
+    cv::Rect rect = box;
+    rect.x += crop.x;
+    rect.y += crop.y;
+    rect &= cv::Rect(0, 0, frame.cols, frame.rows);
+    if (rect.area() > 0) {
+      detection_rects.push_back(rect);
+    }
+  }
+
+  cv::Rect best_detection_rect;
+  if (detection.found) {
+    best_detection_rect = detection.bbox;
+    best_detection_rect.x += crop.x;
+    best_detection_rect.y += crop.y;
+    best_detection_rect &= cv::Rect(0, 0, frame.cols, frame.rows);
+  }
+
+  auto draw_annotations = [&](cv::Mat &img) {
+    cv::Rect crop_rect = crop & cv::Rect(0, 0, img.cols, img.rows);
+    if (crop_rect.area() > 0) {
+      cv::rectangle(img, crop_rect, cv::Scalar(255, 255, 0), 2);
+    }
+
+    const cv::Rect sample_rect = sampleRect(img);
+    if (sample_rect.area() > 0) {
+      cv::rectangle(img, sample_rect, cv::Scalar(0, 255, 0), 2);
+    }
+
+    for (const auto &rect : detection_rects) {
+      cv::rectangle(img, rect, cv::Scalar(0, 165, 255), 2);
+    }
+
+    if (detection.found && best_detection_rect.area() > 0) {
+      cv::rectangle(img, best_detection_rect, cv::Scalar(0, 255, 255), 2);
+      cv::putText(img, detection.label,
+                  cv::Point(best_detection_rect.x,
+                            std::max(20, best_detection_rect.y - 6)),
+                  cv::FONT_HERSHEY_SIMPLEX, 0.6,
+                  cv::Scalar(0, 255, 255), 2);
+    } else {
+      cv::putText(img, "NO TARGET",
+                  cv::Point(std::max(10, crop_rect.x + 4),
+                            std::max(24, crop_rect.y + 24)),
+                  cv::FONT_HERSHEY_SIMPLEX, 0.7,
+                  cv::Scalar(0, 0, 255), 2);
+    }
+  };
 
   if (debug_save_frames_) {
     rclcpp::Clock steady_clock(RCL_STEADY_TIME);
@@ -119,17 +254,26 @@ void ImageProcessorNode::onImage(
                     debug_frames_dir_resolved_.c_str(),
                     ec.message().c_str());
       } else {
-        std::ostringstream name;
-        name << debug_frames_dir_resolved_ << "/frame_"
-             << std::setfill('0')
-             << std::setw(6) << debug_frame_index_++ << ".png";
-        if (!cv::imwrite(name.str(), frame)) {
-          RCLCPP_WARN(get_logger(), "Failed to write debug frame to %s",
-                      name.str().c_str());
-        } else {
-          RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
-                               "Saved debug frame to %s",
-                               name.str().c_str());
+        try {
+          cv::Mat debug_frame = frame.clone();
+          draw_annotations(debug_frame);
+
+          std::ostringstream name;
+          name << debug_frames_dir_resolved_ << "/frame_"
+               << std::setfill('0')
+               << std::setw(6) << debug_frame_index_++ << ".png";
+          if (!cv::imwrite(name.str(), debug_frame)) {
+            RCLCPP_WARN(get_logger(), "Failed to write debug frame to %s",
+                        name.str().c_str());
+          } else {
+            RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
+                                 "Saved debug frame to %s",
+                                 name.str().c_str());
+          }
+        } catch (const cv::Exception &ex) {
+          RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 2000,
+                                "OpenCV exception in frame save: %s",
+                                ex.what());
         }
       }
       last_debug_frame_time_ = now;
@@ -143,35 +287,24 @@ void ImageProcessorNode::onImage(
       (now - last_debug_save_time_).nanoseconds() >=
       static_cast<int64_t>(debug_save_interval_ms_) * 1000000LL;
     if (due) {
-      cv::Mat debug_frame = frame.clone();
-      const cv::Rect sample_rect = sampleRect(frame);
-      if (sample_rect.area() > 0) {
-        cv::rectangle(debug_frame, sample_rect, cv::Scalar(0, 255, 0), 2);
-      }
-      if (!cv::imwrite(debug_save_path_, debug_frame)) {
-        RCLCPP_WARN(get_logger(), "Failed to write debug overlay to %s",
-                    debug_save_path_.c_str());
-      } else {
-        RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
-                             "Saved debug overlay to %s",
-                             debug_save_path_.c_str());
+      try {
+        cv::Mat debug_frame = frame.clone();
+        draw_annotations(debug_frame);
+        if (!cv::imwrite(debug_save_path_, debug_frame)) {
+          RCLCPP_WARN(get_logger(), "Failed to write debug overlay to %s",
+                      debug_save_path_.c_str());
+        } else {
+          RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
+                               "Saved debug overlay to %s",
+                               debug_save_path_.c_str());
+        }
+      } catch (const cv::Exception &ex) {
+        RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 2000,
+                              "OpenCV exception in overlay save: %s",
+                              ex.what());
       }
       last_debug_save_time_ = now;
     }
-  }
-
-  if (detection.found) {
-    const float x = detection.center.x + static_cast<float>(crop.x);
-    const float y = detection.center.y + static_cast<float>(crop.y);
-    const float y_lb = static_cast<float>(frame.rows - 1) - y;
-    RCLCPP_INFO_THROTTLE(
-      get_logger(), *get_clock(), 500,
-      "Target: %s center=(%.1f, %.1f) area=%.1f", detection.label.c_str(), x,
-      y_lb, detection.area);
-  } else {
-    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500,
-                         "Center color: %s (B=%.1f G=%.1f R=%.1f)",
-                         color.c_str(), mean_bgr[0], mean_bgr[1], mean_bgr[2]);
   }
 }
 
@@ -211,10 +344,10 @@ cv::Rect ImageProcessorNode::sampleRect(const cv::Mat &frame) const {
     return cv::Rect();
   }
 
-  const int window = std::max(1, center_window_);
+  const int window = std::max(1, sample_window_);
   const int half = window / 2;
-  const int sample_x = frame.cols / 2;
-  const int sample_y = frame.rows - 1 - half;
+  const int sample_x = frame.cols / 2 + sample_offset_x_;
+  const int sample_y = frame.rows - 1 - half - sample_offset_y_;
 
   const int x0 = std::clamp(sample_x - half, 0, frame.cols - 1);
   const int y0 = std::clamp(sample_y - half, 0, frame.rows - 1);
@@ -278,93 +411,61 @@ ImageProcessorNode::DetectionResult ImageProcessorNode::detectTarget(
     return mask;
   };
 
-  struct Marker {
-    cv::Rect bbox;
-    cv::Point2f center;
-  };
+  std::vector<std::string> enemy_colors;
+  if (preferred == "red") {
+    enemy_colors = {"blue"};
+  } else if (preferred == "blue") {
+    enemy_colors = {"red"};
+  } else {
+    // 无法判定自车颜色时，保守地把红蓝都视为敌方
+    enemy_colors = {"red", "blue"};
+  }
 
-  auto collect_markers = [&](const cv::Mat &mask) {
-    std::vector<Marker> markers;
+  for (const auto &label : enemy_colors) {
+    cv::Mat mask = build_mask(label);
     if (mask.empty()) {
-      return markers;
+      continue;
     }
-    cv::Mat cleaned = mask;
+
     const int k = std::max(1, morph_kernel_);
     if (k > 1) {
       const cv::Mat kernel = cv::getStructuringElement(
         cv::MORPH_RECT, cv::Size(k, k));
-      cv::morphologyEx(cleaned, cleaned, cv::MORPH_OPEN, kernel);
-      cv::morphologyEx(cleaned, cleaned, cv::MORPH_CLOSE, kernel);
+      cv::morphologyEx(mask, mask, cv::MORPH_OPEN, kernel);
+      cv::morphologyEx(mask, mask, cv::MORPH_CLOSE, kernel);
     }
 
     std::vector<std::vector<cv::Point>> contours;
-    cv::findContours(cleaned, contours, cv::RETR_EXTERNAL,
-                     cv::CHAIN_APPROX_SIMPLE);
+    cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
     for (const auto &contour : contours) {
-      const double area = cv::contourArea(contour);
-      if (area < static_cast<double>(marker_min_area_) ||
-          area > static_cast<double>(marker_max_area_)) {
+      const double contour_area = cv::contourArea(contour);
+      if (contour_area < static_cast<double>(marker_min_area_) ||
+          contour_area > static_cast<double>(marker_max_area_)) {
         continue;
       }
+
       cv::Rect rect = cv::boundingRect(contour);
-      Marker marker;
-      marker.bbox = rect;
-      marker.center = cv::Point2f(rect.x + rect.width * 0.5f,
+      const int pad = std::max(0, bbox_pad_);
+      rect.x = std::max(0, rect.x - pad);
+      rect.y = std::max(0, rect.y - pad);
+      rect.width = std::min(roi.cols - rect.x, rect.width + pad * 2);
+      rect.height = std::min(roi.rows - rect.y, rect.height + pad * 2);
+      if (rect.width <= 0 || rect.height <= 0) {
+        continue;
+      }
+
+      best.boxes.push_back(rect);
+
+      const double area = static_cast<double>(rect.area());
+      if (!best.found || area > best.area) {
+        best.found = true;
+        best.area = area;
+        best.bbox = rect;
+        best.center = cv::Point2f(rect.x + rect.width * 0.5f,
                                   rect.y + rect.height * 0.5f);
-      markers.push_back(marker);
-    }
-    return markers;
-  };
-
-  auto evaluate_marker_pairs = [&](const std::vector<Marker> &markers,
-                                   const std::string &label) {
-    if (markers.size() < 2) {
-      return;
-    }
-    for (size_t i = 0; i + 1 < markers.size(); ++i) {
-      for (size_t j = i + 1; j < markers.size(); ++j) {
-        const float dy = std::abs(markers[i].center.y - markers[j].center.y);
-        if (dy > static_cast<float>(pair_y_tol_)) {
-          continue;
-        }
-        const float dx = std::abs(markers[i].center.x - markers[j].center.x);
-        if (dx < static_cast<float>(pair_min_dx_)) {
-          continue;
-        }
-
-        cv::Rect rect = markers[i].bbox | markers[j].bbox;
-        const int pad = std::max(0, bbox_pad_);
-        rect.x = std::max(0, rect.x - pad);
-        rect.y = std::max(0, rect.y - pad);
-        rect.width = std::min(roi.cols - rect.x, rect.width + pad * 2);
-        rect.height = std::min(roi.rows - rect.y, rect.height + pad * 2);
-
-        const double area = static_cast<double>(rect.area());
-        if (!best.found || area > best.area) {
-          best.found = true;
-          best.area = area;
-          best.bbox = rect;
-          best.center = cv::Point2f(rect.x + rect.width * 0.5f,
-                                    rect.y + rect.height * 0.5f);
-          best.label = label;
-        }
+        best.label = label;
       }
     }
-  };
-
-  auto detect_color = [&](const std::string &label) {
-    const cv::Mat mask = build_mask(label);
-    const std::vector<Marker> markers = collect_markers(mask);
-    evaluate_marker_pairs(markers, label);
-  };
-
-  if (preferred == "red") {
-    detect_color("blue");
-  } else if (preferred == "blue") {
-    detect_color("red");
-  } else {
-    detect_color("red");
-    detect_color("blue");
   }
 
   return best;

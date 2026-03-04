@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zdk/ckyf/homework2026/cilent
+CMAKE_SOURCE_DIR = /home/zdk/work/homework2026/cilent
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zdk/ckyf/homework2026/build/cilent
+CMAKE_BINARY_DIR = /home/zdk/work/homework2026/build/cilent
 
 # Utility rule file for cilent_uninstall.
 
@@ -67,7 +67,7 @@ include CMakeFiles/cilent_uninstall.dir/compiler_depend.make
 include CMakeFiles/cilent_uninstall.dir/progress.make
 
 CMakeFiles/cilent_uninstall:
-	/usr/bin/cmake -P /home/zdk/ckyf/homework2026/build/cilent/ament_cmake_uninstall_target/ament_cmake_uninstall_target.cmake
+	/usr/bin/cmake -P /home/zdk/work/homework2026/build/cilent/ament_cmake_uninstall_target/ament_cmake_uninstall_target.cmake
 
 cilent_uninstall: CMakeFiles/cilent_uninstall
 cilent_uninstall: CMakeFiles/cilent_uninstall.dir/build.make
@@ -82,6 +82,6 @@ CMakeFiles/cilent_uninstall.dir/clean:
 .PHONY : CMakeFiles/cilent_uninstall.dir/clean
 
 CMakeFiles/cilent_uninstall.dir/depend:
-	cd /home/zdk/ckyf/homework2026/build/cilent && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zdk/ckyf/homework2026/cilent /home/zdk/ckyf/homework2026/cilent /home/zdk/ckyf/homework2026/build/cilent /home/zdk/ckyf/homework2026/build/cilent /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles/cilent_uninstall.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/zdk/work/homework2026/build/cilent && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zdk/work/homework2026/cilent /home/zdk/work/homework2026/cilent /home/zdk/work/homework2026/build/cilent /home/zdk/work/homework2026/build/cilent /home/zdk/work/homework2026/build/cilent/CMakeFiles/cilent_uninstall.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/cilent_uninstall.dir/depend
 

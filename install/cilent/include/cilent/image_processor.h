@@ -2,6 +2,7 @@
 #define CILENT_IMAGE_PROCESSOR_H
 
 #include <string>
+#include <vector>
 
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/core.hpp>
@@ -19,12 +20,25 @@ class ImageProcessorNode : public rclcpp::Node {
     bool found = false;
     cv::Point2f center;
     cv::Rect bbox;
+    std::vector<cv::Rect> boxes;
     double area = 0.0;
     std::string label;
   };
 
+  struct ImageContext {
+    cv_bridge::CvImageConstPtr cv_ptr;
+    cv::Rect crop;
+    cv::Vec3d mean_bgr;
+    std::string color;
+    DetectionResult detection;
+  };
+
  protected:
   virtual void onImage(const sensor_msgs::msg::Image::SharedPtr msg);
+  bool buildImageContext(const sensor_msgs::msg::Image::SharedPtr &msg,
+                         ImageContext &ctx);
+  void maybeSaveDebugImages(const cv::Mat &frame, const cv::Rect &crop,
+                            const DetectionResult &detection);
   virtual cv::Rect computeCropRect(int width, int height) const;
   virtual cv::Vec3d meanCenterColor(const cv::Mat &frame) const;
   virtual std::string classifyColor(const cv::Vec3d &bgr) const;
@@ -37,6 +51,9 @@ class ImageProcessorNode : public rclcpp::Node {
   int crop_width_;
   int crop_height_;
   int center_window_;
+  int sample_window_;
+  int sample_offset_x_;
+  int sample_offset_y_;
   int color_delta_;
 
   int hsv_s_min_;

@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp" "CMakeFiles/image_processor.dir/src/image_processor.cpp.o" "gcc" "CMakeFiles/image_processor.dir/src/image_processor.cpp.o.d"
+  "/home/zdk/work/homework2026/cilent/src/image_processor.cpp" "CMakeFiles/image_processor.dir/src/image_processor.cpp.o" "gcc" "CMakeFiles/image_processor.dir/src/image_processor.cpp.o.d"
   )
 
 # Targets to which this target links.

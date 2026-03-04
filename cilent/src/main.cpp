@@ -22,6 +22,8 @@ class AutoAimNode : public ImageProcessorNode {
 														 "/dev/pts/8")),
 			sender_(serial_device_),
 			yaw_fov_deg_(declare_parameter<double>("yaw_fov_deg", 90.0)),
+			yaw_sign_(declare_parameter<double>("yaw_sign", -1.0)),
+			yaw_offset_deg_(declare_parameter<double>("yaw_offset_deg", 90.0)),
 			fire_x_tol_px_(declare_parameter<int>("fire_x_tol_px", 10)),
 			fire_cooldown_ms_(declare_parameter<int>("fire_cooldown_ms", 250)),
 			edge_ignore_px_(declare_parameter<int>("edge_ignore_px", 100)),
@@ -44,49 +46,26 @@ class AutoAimNode : public ImageProcessorNode {
 
  protected:
 	void onImage(const sensor_msgs::msg::Image::SharedPtr msg) override {
-		if (!msg) {
+		ImageContext ctx;
+		if (!buildImageContext(msg, ctx)) {
 			return;
 		}
 
-		if (msg->width != static_cast<uint32_t>(expected_width_) ||
-				msg->height != static_cast<uint32_t>(expected_height_)) {
-			RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 2000,
-													 "Unexpected resolution: %ux%u, expected %dx%d",
-													 msg->width, msg->height, expected_width_,
-													 expected_height_);
-			return;
-		}
+		const cv::Mat &frame = ctx.cv_ptr->image;
+		const cv::Rect &crop = ctx.crop;
+		const cv::Vec3d &mean_bgr = ctx.mean_bgr;
+		const std::string &own_color = ctx.color;
+		const DetectionResult &detection = ctx.detection;
 
-		cv_bridge::CvImageConstPtr cv_ptr;
-		try {
-			cv_ptr = cv_bridge::toCvShare(msg, "bgr8");
-		} catch (const cv_bridge::Exception &ex) {
-			RCLCPP_ERROR(get_logger(), "cv_bridge error: %s", ex.what());
-			return;
-		}
-
-		const cv::Mat &frame = cv_ptr->image;
-		if (frame.empty()) {
-			return;
-		}
-
-		const cv::Rect crop = computeCropRect(frame.cols, frame.rows);
-		if (crop.width <= 0 || crop.height <= 0) {
-			return;
-		}
-
-		const cv::Mat roi = frame(crop);
-		const cv::Vec3d mean_bgr = meanCenterColor(roi);
-		const std::string own_color = classifyColor(mean_bgr);
-		const DetectionResult detection = detectTarget(roi, own_color);
+		maybeSaveDebugImages(frame, crop, detection);
 
 		if (!detection.found) {
 			last_target_lost_time_ = this->now();
 			stop_firing_ = true;
 			RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500,
-													 "Center color: %s (B=%.1f G=%.1f R=%.1f)",
-													 own_color.c_str(), mean_bgr[0], mean_bgr[1],
-													 mean_bgr[2]);
+											 "Center color: %s (B=%.1f G=%.1f R=%.1f)",
+											 own_color.c_str(), mean_bgr[0], mean_bgr[1],
+											 mean_bgr[2]);
 			return;
 		}
 
@@ -105,7 +84,7 @@ class AutoAimNode : public ImageProcessorNode {
 		const float y = detection.center.y + static_cast<float>(crop.y);
 		const int edge = std::max(0, edge_ignore_px_);
 		if (x < static_cast<float>(edge) ||
-				x > static_cast<float>(frame.cols - 1 - edge)) {
+			x > static_cast<float>(frame.cols - 1 - edge)) {
 			return;
 		}
 		const float y_lb = static_cast<float>(frame.rows - 1) - y;
@@ -132,7 +111,11 @@ class AutoAimNode : public ImageProcessorNode {
 
 		const float x_center = (static_cast<float>(frame.cols) - 1.0f) * 0.5f;
 		const float norm = (lead_x - x_center) / x_center;
-		const float yaw = static_cast<float>(yaw_fov_deg_ * 0.5 * norm);
+		const float yaw_body =
+			static_cast<float>(yaw_sign_ * yaw_fov_deg_ * 0.5 * norm);
+		float yaw = yaw_body + static_cast<float>(yaw_offset_deg_);
+		while (yaw > 180.0f) yaw -= 360.0f;
+		while (yaw < -180.0f) yaw += 360.0f;
 
 		if (!sender_.isOpen()) {
 			sender_.open();
@@ -142,11 +125,8 @@ class AutoAimNode : public ImageProcessorNode {
 		}
 
 		bool allow_fire = auto_fire_ && !stop_firing_;
-		if (own_color == "red" || own_color == "blue") {
-			if (detection.label == own_color) {
-				allow_fire = false;
-			}
-		} else {
+		if ((own_color == "red" || own_color == "blue") &&
+			detection.label == own_color) {
 			allow_fire = false;
 		}
 
@@ -163,14 +143,16 @@ class AutoAimNode : public ImageProcessorNode {
 
 		RCLCPP_INFO_THROTTLE(
 			get_logger(), *get_clock(), 500,
-			  "Own=%s Target=%s center=(%.1f, %.1f) yaw=%.1f", 
-			  own_color.c_str(), detection.label.c_str(), lead_x, y_lb, yaw);
+			"Own=%s Target=%s center=(%.1f, %.1f) yaw=%.1f",
+			own_color.c_str(), detection.label.c_str(), lead_x, y_lb, yaw);
 	}
 
  private:
 	std::string serial_device_;
 	SerialSender sender_;
 	double yaw_fov_deg_;
+	double yaw_sign_;
+	double yaw_offset_deg_;
 	int fire_x_tol_px_;
 	int fire_cooldown_ms_;
 	int edge_ignore_px_;

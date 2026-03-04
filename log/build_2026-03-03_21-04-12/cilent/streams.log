@@ -1,0 +1,6 @@
+[0.006s] Invoking command in '/home/zdk/work/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/work/homework2026/build/cilent -- -j32 -l32
+[0.012s] [0mCMake Error: The current CMakeCache.txt directory /home/zdk/work/homework2026/build/cilent/CMakeCache.txt is different than the directory /home/zdk/ckyf/homework2026/build/cilent where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt[0m
+[0.019s] [0mCMake Error: The source directory "/home/zdk/ckyf/homework2026/cilent" does not exist.
+[0.019s] Specify --help for usage, or press the help button on the CMake GUI.[0m
+[0.020s] gmake: *** [Makefile:390：cmake_check_build_system] 错误 1
+[0.021s] Invoked command in '/home/zdk/work/homework2026/build/cilent' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/work/homework2026/build/cilent -- -j32 -l32

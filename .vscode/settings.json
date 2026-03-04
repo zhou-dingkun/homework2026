@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/home/zdk/ckyf/homework2026/cilent"
+    "cmake.sourceDirectory": "/home/zdk/ckyf/homework2026/cilent",
+    "cmake.ignoreCMakeListsMissing": true
 }

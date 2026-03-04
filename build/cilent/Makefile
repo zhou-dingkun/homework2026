@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zdk/ckyf/homework2026/cilent
+CMAKE_SOURCE_DIR = /home/zdk/work/homework2026/cilent
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zdk/ckyf/homework2026/build/cilent
+CMAKE_BINARY_DIR = /home/zdk/work/homework2026/build/cilent
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -142,9 +142,9 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles /home/zdk/ckyf/homework2026/build/cilent//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles /home/zdk/work/homework2026/build/cilent//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zdk/work/homework2026/build/cilent/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

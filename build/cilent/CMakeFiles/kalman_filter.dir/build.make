@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zdk/ckyf/homework2026/cilent
+CMAKE_SOURCE_DIR = /home/zdk/work/homework2026/cilent
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zdk/ckyf/homework2026/build/cilent
+CMAKE_BINARY_DIR = /home/zdk/work/homework2026/build/cilent
 
 # Include any dependencies generated for this target.
 include CMakeFiles/kalman_filter.dir/depend.make
@@ -70,18 +70,18 @@ include CMakeFiles/kalman_filter.dir/progress.make
 include CMakeFiles/kalman_filter.dir/flags.make
 
 CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o: CMakeFiles/kalman_filter.dir/flags.make
-CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o: /home/zdk/ckyf/homework2026/cilent/src/kalman_filter.cpp
+CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o: /home/zdk/work/homework2026/cilent/src/kalman_filter.cpp
 CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o: CMakeFiles/kalman_filter.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o -MF CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o.d -o CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o -c /home/zdk/ckyf/homework2026/cilent/src/kalman_filter.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o -MF CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o.d -o CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o -c /home/zdk/work/homework2026/cilent/src/kalman_filter.cpp
 
 CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zdk/ckyf/homework2026/cilent/src/kalman_filter.cpp > CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zdk/work/homework2026/cilent/src/kalman_filter.cpp > CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.i
 
 CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zdk/ckyf/homework2026/cilent/src/kalman_filter.cpp -o CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zdk/work/homework2026/cilent/src/kalman_filter.cpp -o CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.s
 
 # Object files for target kalman_filter
 kalman_filter_OBJECTS = \
@@ -93,7 +93,7 @@ kalman_filter_EXTERNAL_OBJECTS =
 libkalman_filter.a: CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o
 libkalman_filter.a: CMakeFiles/kalman_filter.dir/build.make
 libkalman_filter.a: CMakeFiles/kalman_filter.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libkalman_filter.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libkalman_filter.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/kalman_filter.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/kalman_filter.dir/link.txt --verbose=$(VERBOSE)
 
@@ -106,6 +106,6 @@ CMakeFiles/kalman_filter.dir/clean:
 .PHONY : CMakeFiles/kalman_filter.dir/clean
 
 CMakeFiles/kalman_filter.dir/depend:
-	cd /home/zdk/ckyf/homework2026/build/cilent && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zdk/ckyf/homework2026/cilent /home/zdk/ckyf/homework2026/cilent /home/zdk/ckyf/homework2026/build/cilent /home/zdk/ckyf/homework2026/build/cilent /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles/kalman_filter.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/zdk/work/homework2026/build/cilent && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zdk/work/homework2026/cilent /home/zdk/work/homework2026/cilent /home/zdk/work/homework2026/build/cilent /home/zdk/work/homework2026/build/cilent /home/zdk/work/homework2026/build/cilent/CMakeFiles/kalman_filter.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/kalman_filter.dir/depend
 

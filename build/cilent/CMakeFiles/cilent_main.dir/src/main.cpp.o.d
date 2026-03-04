@@ -1,5 +1,5 @@
 CMakeFiles/cilent_main.dir/src/main.cpp.o: \
- /home/zdk/ckyf/homework2026/cilent/src/main.cpp \
+ /home/zdk/work/homework2026/cilent/src/main.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/11/cmath \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -289,7 +289,7 @@ CMakeFiles/cilent_main.dir/src/main.cpp.o: \
  /usr/include/opencv4/opencv2/core/cvdef.h \
  /usr/include/opencv4/opencv2/imgproc/imgproc.hpp \
  /usr/include/opencv4/opencv2/imgproc.hpp \
- /usr/include/opencv4/opencv2/imgproc/segmentation.hpp \
+ /usr/include/opencv4/opencv2/./imgproc/segmentation.hpp \
  /usr/include/opencv4/opencv2/imgproc/types_c.h \
  /usr/include/opencv4/opencv2/core/core_c.h \
  /usr/include/opencv4/opencv2/core/types_c.h \
@@ -682,8 +682,8 @@ CMakeFiles/cilent_main.dir/src/main.cpp.o: \
  /opt/ros/humble/include/rclcpp/rclcpp/wait_set_policies/thread_safe_synchronization.hpp \
  /opt/ros/humble/include/rclcpp/rclcpp/wait_set_policies/detail/write_preferring_read_write_lock.hpp \
  /opt/ros/humble/include/rclcpp/rclcpp/wait_set_template.hpp \
- /home/zdk/ckyf/homework2026/cilent/include/cilent/image_processor.h \
- /home/zdk/ckyf/homework2026/cilent/include/cilent/kalman_filter.h \
+ /home/zdk/work/homework2026/cilent/include/cilent/image_processor.h \
+ /home/zdk/work/homework2026/cilent/include/cilent/kalman_filter.h \
  /usr/include/eigen3/Eigen/Dense /usr/include/eigen3/Eigen/Core \
  /usr/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h \
  /usr/include/eigen3/Eigen/src/Core/util/Macros.h \
@@ -870,4 +870,4 @@ CMakeFiles/cilent_main.dir/src/main.cpp.o: \
  /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
  /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
  /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
- /home/zdk/ckyf/homework2026/cilent/include/cilent/serial_sender.h
+ /home/zdk/work/homework2026/cilent/include/cilent/serial_sender.h

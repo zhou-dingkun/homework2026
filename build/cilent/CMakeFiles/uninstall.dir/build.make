@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zdk/ckyf/homework2026/cilent
+CMAKE_SOURCE_DIR = /home/zdk/work/homework2026/cilent
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zdk/ckyf/homework2026/build/cilent
+CMAKE_BINARY_DIR = /home/zdk/work/homework2026/build/cilent
 
 # Utility rule file for uninstall.
 
@@ -78,6 +78,6 @@ CMakeFiles/uninstall.dir/clean:
 .PHONY : CMakeFiles/uninstall.dir/clean
 
 CMakeFiles/uninstall.dir/depend:
-	cd /home/zdk/ckyf/homework2026/build/cilent && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zdk/ckyf/homework2026/cilent /home/zdk/ckyf/homework2026/cilent /home/zdk/ckyf/homework2026/build/cilent /home/zdk/ckyf/homework2026/build/cilent /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles/uninstall.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/zdk/work/homework2026/build/cilent && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zdk/work/homework2026/cilent /home/zdk/work/homework2026/cilent /home/zdk/work/homework2026/build/cilent /home/zdk/work/homework2026/build/cilent /home/zdk/work/homework2026/build/cilent/CMakeFiles/uninstall.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/uninstall.dir/depend
 

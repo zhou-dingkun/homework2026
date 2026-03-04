@@ -1,0 +1,8 @@
+/usr/bin/ld: warning: libopencv_imgcodecs.so.4.5d, needed by /opt/ros/humble/lib/libcv_bridge.so, may conflict with libopencv_imgcodecs.so.414
+/usr/bin/ld: warning: libopencv_imgproc.so.4.5d, needed by /opt/ros/humble/lib/libcv_bridge.so, may conflict with libopencv_imgproc.so.414
+/usr/bin/ld: libimage_processor.a(image_processor.cpp.o): undefined reference to symbol '_ZN2cv8cvtColorERKNS_11_InputArrayERKNS_12_OutputArrayEii'
+/usr/bin/ld: /lib/x86_64-linux-gnu/libopencv_imgproc.so.4.5d: error adding symbols: DSO missing from command line
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/cilent_main.dir/build.make:237：cilent_main] 错误 1
+gmake[1]: *** [CMakeFiles/Makefile2:223：CMakeFiles/cilent_main.dir/all] 错误 2
+gmake: *** [Makefile:146：all] 错误 2

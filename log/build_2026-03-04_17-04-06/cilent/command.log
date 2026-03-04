@@ -1,0 +1,4 @@
+Invoking command in '/home/zdk/work/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/zdk/work/homework2026/cilent -DCMAKE_INSTALL_PREFIX=/home/zdk/work/homework2026/install/cilent
+Invoked command in '/home/zdk/work/homework2026/build/cilent' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/zdk/work/homework2026/cilent -DCMAKE_INSTALL_PREFIX=/home/zdk/work/homework2026/install/cilent
+Invoking command in '/home/zdk/work/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/work/homework2026/build/cilent -- -j32 -l32
+Invoked command in '/home/zdk/work/homework2026/build/cilent' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/work/homework2026/build/cilent -- -j32 -l32

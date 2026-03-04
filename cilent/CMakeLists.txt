@@ -12,7 +12,26 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
-find_package(OpenCV REQUIRED)
+
+set(CV_BRIDGE_INCLUDE_DIR "/opt/ros/humble/include/cv_bridge")
+set(CV_BRIDGE_LIBRARY "/opt/ros/humble/lib/libcv_bridge.so")
+if(NOT EXISTS "${CV_BRIDGE_LIBRARY}")
+  message(FATAL_ERROR "Required cv_bridge library not found: ${CV_BRIDGE_LIBRARY}")
+endif()
+
+set(OPENCV_SYSTEM_INCLUDE_DIR "/usr/include/opencv4")
+set(OPENCV_SYSTEM_LIB_DIR "/usr/lib/x86_64-linux-gnu")
+set(OPENCV_SYSTEM_LIBS
+  "${OPENCV_SYSTEM_LIB_DIR}/libopencv_core.so.4.5d"
+  "${OPENCV_SYSTEM_LIB_DIR}/libopencv_imgproc.so.4.5d"
+  "${OPENCV_SYSTEM_LIB_DIR}/libopencv_imgcodecs.so.4.5d"
+)
+
+foreach(_opencv_lib IN LISTS OPENCV_SYSTEM_LIBS)
+  if(NOT EXISTS "${_opencv_lib}")
+    message(FATAL_ERROR "Required OpenCV library not found: ${_opencv_lib}")
+  endif()
+endforeach()
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -40,10 +59,12 @@ add_library(image_processor src/image_processor.cpp)
 target_include_directories(image_processor PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
+  ${CV_BRIDGE_INCLUDE_DIR}
+  ${OPENCV_SYSTEM_INCLUDE_DIR}
 )
-ament_target_dependencies(image_processor rclcpp sensor_msgs cv_bridge
+ament_target_dependencies(image_processor rclcpp sensor_msgs
   image_transport)
-target_link_libraries(image_processor ${OpenCV_LIBS})
+target_link_libraries(image_processor ${CV_BRIDGE_LIBRARY} ${OPENCV_SYSTEM_LIBS})
 
 install(TARGETS image_processor
   EXPORT export_${PROJECT_NAME}
@@ -70,9 +91,9 @@ target_include_directories(cilent_main PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-ament_target_dependencies(cilent_main rclcpp sensor_msgs cv_bridge)
+ament_target_dependencies(cilent_main rclcpp sensor_msgs)
 target_link_libraries(cilent_main image_processor serial_sender kalman_filter
-  Eigen3::Eigen)
+  Eigen3::Eigen ${OPENCV_SYSTEM_LIBS})
 
 install(TARGETS cilent_main
   DESTINATION lib/${PROJECT_NAME}

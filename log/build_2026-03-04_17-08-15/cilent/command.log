@@ -1,0 +1,2 @@
+Invoking command in '/home/zdk/work/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/zdk/work/homework2026/cilent -DCMAKE_INSTALL_PREFIX=/home/zdk/work/homework2026/install/cilent
+Invoked command in '/home/zdk/work/homework2026/build/cilent' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/zdk/work/homework2026/cilent -DCMAKE_INSTALL_PREFIX=/home/zdk/work/homework2026/install/cilent

@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zdk/ckyf/homework2026/cilent
+CMAKE_SOURCE_DIR = /home/zdk/work/homework2026/cilent
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zdk/ckyf/homework2026/build/cilent
+CMAKE_BINARY_DIR = /home/zdk/work/homework2026/build/cilent
 
 # Include any dependencies generated for this target.
 include CMakeFiles/image_processor.dir/depend.make
@@ -70,18 +70,18 @@ include CMakeFiles/image_processor.dir/progress.make
 include CMakeFiles/image_processor.dir/flags.make
 
 CMakeFiles/image_processor.dir/src/image_processor.cpp.o: CMakeFiles/image_processor.dir/flags.make
-CMakeFiles/image_processor.dir/src/image_processor.cpp.o: /home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp
+CMakeFiles/image_processor.dir/src/image_processor.cpp.o: /home/zdk/work/homework2026/cilent/src/image_processor.cpp
 CMakeFiles/image_processor.dir/src/image_processor.cpp.o: CMakeFiles/image_processor.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/image_processor.dir/src/image_processor.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_processor.dir/src/image_processor.cpp.o -MF CMakeFiles/image_processor.dir/src/image_processor.cpp.o.d -o CMakeFiles/image_processor.dir/src/image_processor.cpp.o -c /home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/image_processor.dir/src/image_processor.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_processor.dir/src/image_processor.cpp.o -MF CMakeFiles/image_processor.dir/src/image_processor.cpp.o.d -o CMakeFiles/image_processor.dir/src/image_processor.cpp.o -c /home/zdk/work/homework2026/cilent/src/image_processor.cpp
 
 CMakeFiles/image_processor.dir/src/image_processor.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_processor.dir/src/image_processor.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp > CMakeFiles/image_processor.dir/src/image_processor.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zdk/work/homework2026/cilent/src/image_processor.cpp > CMakeFiles/image_processor.dir/src/image_processor.cpp.i
 
 CMakeFiles/image_processor.dir/src/image_processor.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_processor.dir/src/image_processor.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zdk/ckyf/homework2026/cilent/src/image_processor.cpp -o CMakeFiles/image_processor.dir/src/image_processor.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zdk/work/homework2026/cilent/src/image_processor.cpp -o CMakeFiles/image_processor.dir/src/image_processor.cpp.s
 
 # Object files for target image_processor
 image_processor_OBJECTS = \
@@ -93,7 +93,7 @@ image_processor_EXTERNAL_OBJECTS =
 libimage_processor.a: CMakeFiles/image_processor.dir/src/image_processor.cpp.o
 libimage_processor.a: CMakeFiles/image_processor.dir/build.make
 libimage_processor.a: CMakeFiles/image_processor.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zdk/ckyf/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libimage_processor.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zdk/work/homework2026/build/cilent/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libimage_processor.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/image_processor.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/image_processor.dir/link.txt --verbose=$(VERBOSE)
 
@@ -106,6 +106,6 @@ CMakeFiles/image_processor.dir/clean:
 .PHONY : CMakeFiles/image_processor.dir/clean
 
 CMakeFiles/image_processor.dir/depend:
-	cd /home/zdk/ckyf/homework2026/build/cilent && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zdk/ckyf/homework2026/cilent /home/zdk/ckyf/homework2026/cilent /home/zdk/ckyf/homework2026/build/cilent /home/zdk/ckyf/homework2026/build/cilent /home/zdk/ckyf/homework2026/build/cilent/CMakeFiles/image_processor.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/zdk/work/homework2026/build/cilent && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zdk/work/homework2026/cilent /home/zdk/work/homework2026/cilent /home/zdk/work/homework2026/build/cilent /home/zdk/work/homework2026/build/cilent /home/zdk/work/homework2026/build/cilent/CMakeFiles/image_processor.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/image_processor.dir/depend
 
