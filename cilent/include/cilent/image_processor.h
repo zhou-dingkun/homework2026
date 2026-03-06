@@ -38,7 +38,8 @@ class ImageProcessorNode : public rclcpp::Node {
   bool buildImageContext(const sensor_msgs::msg::Image::SharedPtr &msg,
                          ImageContext &ctx);
   void maybeSaveDebugImages(const cv::Mat &frame, const cv::Rect &crop,
-                            const DetectionResult &detection);
+                            const DetectionResult &detection,
+                            const cv::Point2f *aim_point = nullptr);
   virtual cv::Rect computeCropRect(int width, int height) const;
   virtual cv::Vec3d meanCenterColor(const cv::Mat &frame) const;
   virtual std::string classifyColor(const cv::Vec3d &bgr) const;

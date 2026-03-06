@@ -1,6 +1,7 @@
 #include "cilent/image_processor.h"
 
 #include <algorithm>
+#include <cmath>
 #include <filesystem>
 #include <iomanip>
 #include <sstream>
@@ -187,7 +188,7 @@ bool ImageProcessorNode::buildImageContext(
 
 void ImageProcessorNode::maybeSaveDebugImages(
   const cv::Mat &frame, const cv::Rect &crop,
-  const DetectionResult &detection) {
+  const DetectionResult &detection, const cv::Point2f *aim_point) {
   std::vector<cv::Rect> detection_rects;
   detection_rects.reserve(detection.boxes.size());
   for (const auto &box : detection.boxes) {
@@ -236,6 +237,17 @@ void ImageProcessorNode::maybeSaveDebugImages(
                             std::max(24, crop_rect.y + 24)),
                   cv::FONT_HERSHEY_SIMPLEX, 0.7,
                   cv::Scalar(0, 0, 255), 2);
+    }
+
+    if (aim_point) {
+      cv::Point2f p = *aim_point;
+      p.x = std::clamp(p.x, 0.0f, static_cast<float>(img.cols - 1));
+      p.y = std::clamp(p.y, 0.0f, static_cast<float>(img.rows - 1));
+      const cv::Point pi(static_cast<int>(std::lround(p.x)),
+                         static_cast<int>(std::lround(p.y)));
+      cv::circle(img, pi, 6, cv::Scalar(255, 0, 255), 2);
+      cv::putText(img, "LEAD", cv::Point(pi.x + 8, std::max(20, pi.y - 8)),
+                  cv::FONT_HERSHEY_SIMPLEX, 0.55, cv::Scalar(255, 0, 255), 2);
     }
   };
 

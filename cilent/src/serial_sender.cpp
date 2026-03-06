@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cerrno>
+#include <cstdio>
 #include <cstdint>
 #include <cstring>
 
@@ -24,6 +25,17 @@ bool toNativeFloatBytes(float value, std::array<uint8_t, 4> *out) {
 }
 
 bool writeAll(int fd, const uint8_t *data, size_t size) {
+  if (fd >= 0 && data && size > 0) {
+    std::fprintf(stderr, "[serial tx] fd=%d len=%zu data=", fd, size);
+    for (size_t i = 0; i < size; ++i) {
+      std::fprintf(stderr, "%02X", static_cast<unsigned int>(data[i]));
+      if (i + 1 < size) {
+        std::fputc(' ', stderr);
+      }
+    }
+    std::fputc('\n', stderr);
+  }
+
   size_t sent = 0;
   while (sent < size) {
     const ssize_t rc = ::write(fd, data + sent, size - sent);

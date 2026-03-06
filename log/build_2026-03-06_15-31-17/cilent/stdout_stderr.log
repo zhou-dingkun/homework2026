@@ -1,0 +1,38 @@
+[ 50%] Built target serial_sender
+[ 50%] Built target kalman_filter
+[ 75%] Built target image_processor
+[ 87%] [32mBuilding CXX object CMakeFiles/cilent_main.dir/src/main.cpp.o[0m
+[100%] [32m[1mLinking CXX executable cilent_main[0m
+[100%] Built target cilent_main
+-- Install configuration: ""
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/lib/libkalman_filter.a
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/include
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/include/cilent
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/include/cilent/image_processor.h
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/include/cilent/serial_sender.h
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/include/cilent/kalman_filter.h
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/library_path.sh
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/library_path.dsv
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/lib/libimage_processor.a
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/lib/libserial_sender.a
+-- Installing: /home/zdk/work/homework2026/install/cilent/lib/cilent/cilent_main
+-- Set runtime path of "/home/zdk/work/homework2026/install/cilent/lib/cilent/cilent_main" to ""
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/ament_index/resource_index/package_run_dependencies/cilent
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/ament_index/resource_index/parent_prefix_path/cilent
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/ament_prefix_path.sh
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/ament_prefix_path.dsv
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/path.sh
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/path.dsv
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/local_setup.bash
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/local_setup.sh
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/local_setup.zsh
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/local_setup.dsv
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/package.dsv
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/ament_index/resource_index/packages/cilent
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/export_cilentExport.cmake
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/export_cilentExport-noconfig.cmake
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/ament_cmake_export_targets-extras.cmake
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/cilentConfig.cmake
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/cilentConfig-version.cmake
+-- Up-to-date: /home/zdk/work/homework2026/install/cilent/share/cilent/package.xml
