@@ -188,7 +188,8 @@ bool ImageProcessorNode::buildImageContext(
 
 void ImageProcessorNode::maybeSaveDebugImages(
   const cv::Mat &frame, const cv::Rect &crop,
-  const DetectionResult &detection, const cv::Point2f *aim_point) {
+  const DetectionResult &detection, const cv::Point2f *aim_point,
+  const std::vector<cv::Point2f> *all_aim_points) {
   std::vector<cv::Rect> detection_rects;
   detection_rects.reserve(detection.boxes.size());
   for (const auto &box : detection.boxes) {
@@ -237,6 +238,24 @@ void ImageProcessorNode::maybeSaveDebugImages(
                             std::max(24, crop_rect.y + 24)),
                   cv::FONT_HERSHEY_SIMPLEX, 0.7,
                   cv::Scalar(0, 0, 255), 2);
+    }
+
+    if (all_aim_points) {
+      for (size_t i = 0; i < all_aim_points->size(); ++i) {
+        cv::Point2f p = (*all_aim_points)[i];
+        p.x = std::clamp(p.x, 0.0f, static_cast<float>(img.cols - 1));
+        p.y = std::clamp(p.y, 0.0f, static_cast<float>(img.rows - 1));
+        const cv::Point pi(static_cast<int>(std::lround(p.x)),
+                           static_cast<int>(std::lround(p.y)));
+        cv::circle(img, pi, 4, cv::Scalar(255, 128, 0), 2);
+
+        std::ostringstream label;
+        label << "P" << i << "(" << pi.x << "," << pi.y << ")";
+        cv::putText(img, label.str(),
+                    cv::Point(pi.x + 6, std::max(20, pi.y - 6)),
+                    cv::FONT_HERSHEY_SIMPLEX, 0.45,
+                    cv::Scalar(255, 128, 0), 1);
+      }
     }
 
     if (aim_point) {

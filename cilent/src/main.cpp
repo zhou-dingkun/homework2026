@@ -43,7 +43,7 @@ class AutoAimNode : public ImageProcessorNode {
 			fire_x_tol_px_(declare_parameter<int>("fire_x_tol_px", 60)),
 			fire_cooldown_ms_(declare_parameter<int>("fire_cooldown_ms", 50)),
 			edge_ignore_px_(declare_parameter<int>("edge_ignore_px", 20)),
-			lead_time_s_(declare_parameter<double>("lead_time_s", 0.02)),
+			lead_time_s_(declare_parameter<double>("lead_time_s", 0.0)),
 			kf_sigma_a_(declare_parameter<double>("kf_sigma_a", 120.0)),
 			kf_sigma_z_(declare_parameter<double>("kf_sigma_z", 0.1)),
 			target_reset_ms_(declare_parameter<int>("target_reset_ms", 300)),
@@ -117,6 +117,11 @@ class AutoAimNode : public ImageProcessorNode {
 
 		DetectionResult selected = detection;
 		int selected_track_id = -1;
+		const float x_center = (static_cast<float>(frame.cols) - 1.0f) * 0.5f;
+		const double bullet_speed = std::max(1.0, bullet_speed_px_s_);
+		const double latency_comp_s = std::max(0.0, lead_time_s_);
+		std::vector<cv::Point2f> all_lead_points;
+		all_lead_points.reserve(detection.boxes.size());
 		if (!detection.boxes.empty()) {
 			int earliest_any_track_id = std::numeric_limits<int>::max();
 			bool has_any_target = false;
@@ -144,6 +149,19 @@ class AutoAimNode : public ImageProcessorNode {
 											 box.width, box.height);
 				track->last_seen = now;
 				track->label = detection.label;
+
+				const double travel_px =
+					std::abs(static_cast<double>(track->center.x) -
+							 static_cast<double>(x_center));
+				const double flight_time_s = travel_px / bullet_speed;
+				const double lead_time_dynamic_s =
+					std::clamp(flight_time_s + latency_comp_s, 0.0, 0.5);
+				const cv::Point2f lead_point(
+					track->center.x +
+						track->velocity.x * static_cast<float>(lead_time_dynamic_s),
+					track->center.y +
+						track->velocity.y * static_cast<float>(lead_time_dynamic_s));
+				all_lead_points.push_back(lead_point);
 
 				const cv::Point2f center_roi(
 					static_cast<float>(box.x + box.width * 0.5f),
@@ -208,13 +226,22 @@ class AutoAimNode : public ImageProcessorNode {
 			last_meas_time_ = now;
 		}
 
-		const Eigen::Vector2d lead = kf_.predictAhead(lead_time_s_);
+		if (all_lead_points.empty()) {
+			all_lead_points.push_back(cv::Point2f(x, y));
+		}
+
+		const double travel_px =
+			std::abs(static_cast<double>(x) - static_cast<double>(x_center));
+		const double flight_time_s = travel_px / bullet_speed;
+		const double lead_time_dynamic_s =
+			std::clamp(flight_time_s + latency_comp_s, 0.0, 0.5);
+
+		const Eigen::Vector2d lead = kf_.predictAhead(lead_time_dynamic_s);
 		const float lead_x = static_cast<float>(lead.x());
 		const float lead_y = static_cast<float>(lead.y());
 		const cv::Point2f lead_point(lead_x, lead_y);
-		maybeSaveDebugImages(frame, crop, selected, &lead_point);
+		maybeSaveDebugImages(frame, crop, selected, &lead_point, &all_lead_points);
 
-		const float x_center = (static_cast<float>(frame.cols) - 1.0f) * 0.5f;
 		const float norm = (lead_x - x_center) / x_center;
 		const float yaw_body =
 			static_cast<float>(yaw_sign_ * yaw_fov_deg_ * 0.5 * norm);
@@ -277,8 +304,9 @@ class AutoAimNode : public ImageProcessorNode {
 
 		RCLCPP_INFO_THROTTLE(
 			get_logger(), *get_clock(), 500,
-			"Own=%s Target=%s center=(%.1f, %.1f) yaw=%.1f",
-			own_color.c_str(), selected.label.c_str(), lead_x, y_lb, yaw);
+			"Own=%s Target=%s center=(%.1f, %.1f) yaw=%.1f lead_t=%.3f",
+			own_color.c_str(), selected.label.c_str(), lead_x, y_lb, yaw,
+			lead_time_dynamic_s);
 	}
 
 	void onFireTimer() {
