@@ -167,6 +167,9 @@ class AutoAimNode : public ImageProcessorNode {
 
 		const float x = selected.center.x + static_cast<float>(crop.x);
 		const float y = selected.center.y + static_cast<float>(crop.y);
+		const bool track_switched =
+			(selected_track_id >= 0) &&
+			(selected_track_id != last_selected_track_id_);
 		const int edge = std::max(0, edge_ignore_px_);
 		if (x < static_cast<float>(edge) ||
 			x > static_cast<float>(frame.cols - 1 - edge)) {
@@ -178,6 +181,16 @@ class AutoAimNode : public ImageProcessorNode {
 			return;
 		}
 		const float y_lb = static_cast<float>(frame.rows - 1) - y;
+
+		if (track_switched) {
+			kf_.reset(x, y, 0.0, 0.0);
+			kf_initialized_ = true;
+			last_meas_time_ = now;
+			RCLCPP_INFO_THROTTLE(
+				get_logger(), *get_clock(), 300,
+				"Track switched (%d->%d), KF reset at (%.1f, %.1f)",
+				last_selected_track_id_, selected_track_id, x, y_lb);
+		}
 
 		if (!kf_initialized_) {
 			kf_.reset(x, y, 0.0, 0.0);
