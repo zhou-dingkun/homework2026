@@ -28,13 +28,6 @@ class AutoAimNode : public ImageProcessorNode {
 			bullet_speed_px_s_(declare_parameter<double>("bullet_speed_px_s", 600.0)),
 			enemy_speed_max_px_s_(
 				declare_parameter<double>("enemy_speed_max_px_s", 300.0)),
-			gray_s_max_(declare_parameter<int>("gray_s_max", 55)),
-			gray_v_min_(declare_parameter<int>("gray_v_min", 60)),
-			hit_gray_ratio_thresh_(
-				declare_parameter<double>("hit_gray_ratio_thresh", 0.45)),
-			hit_confirm_window_ms_(
-				declare_parameter<int>("hit_confirm_window_ms", 220)),
-			gray_cooldown_ms_(declare_parameter<int>("gray_cooldown_ms", 260)),
 			track_match_px_(declare_parameter<double>("track_match_px", 90.0)),
 			target_commit_ms_(declare_parameter<int>("target_commit_ms", 220)),
 			hold_lost_grace_ms_(declare_parameter<int>("hold_lost_grace_ms", 260)),
@@ -50,10 +43,10 @@ class AutoAimNode : public ImageProcessorNode {
 			fire_x_tol_px_(declare_parameter<int>("fire_x_tol_px", 60)),
 			fire_cooldown_ms_(declare_parameter<int>("fire_cooldown_ms", 50)),
 			edge_ignore_px_(declare_parameter<int>("edge_ignore_px", 20)),
-			lead_time_s_(declare_parameter<double>("lead_time_s", 0.03)),
+			lead_time_s_(declare_parameter<double>("lead_time_s", 0.02)),
 			kf_sigma_a_(declare_parameter<double>("kf_sigma_a", 120.0)),
-			kf_sigma_z_(declare_parameter<double>("kf_sigma_z", 6.0)),
-			target_reset_ms_(declare_parameter<int>("target_reset_ms", 500)),
+			kf_sigma_z_(declare_parameter<double>("kf_sigma_z", 0.1)),
+			target_reset_ms_(declare_parameter<int>("target_reset_ms", 300)),
 			auto_fire_(declare_parameter<bool>("auto_fire", true)),
 			last_fire_time_(0, 0, RCL_ROS_TIME),
 			last_target_lost_time_(0, 0, RCL_ROS_TIME),
@@ -125,21 +118,10 @@ class AutoAimNode : public ImageProcessorNode {
 		DetectionResult selected = detection;
 		int selected_track_id = -1;
 		if (!detection.boxes.empty()) {
-			const float frame_cx = (static_cast<float>(frame.cols) - 1.0f) * 0.5f;
-			const float frame_cy = (static_cast<float>(frame.rows) - 1.0f) * 0.5f;
-			const double roi_area =
-				static_cast<double>(std::max(1, crop.width * crop.height));
-
-			double best_score = -std::numeric_limits<double>::infinity();
-			bool best_in_gray = false;
-			cv::Rect best_box = detection.bbox;
-			cv::Point2f best_center = detection.center;
-
-			double current_score = -std::numeric_limits<double>::infinity();
-			bool current_visible = false;
-			bool current_in_gray = false;
-			cv::Rect current_box = detection.bbox;
-			cv::Point2f current_center = detection.center;
+			int earliest_any_track_id = std::numeric_limits<int>::max();
+			bool has_any_target = false;
+			cv::Rect earliest_any_box;
+			cv::Point2f earliest_any_center;
 
 			for (const auto &box : detection.boxes) {
 				if (box.width <= 0 || box.height <= 0) {
@@ -163,142 +145,24 @@ class AutoAimNode : public ImageProcessorNode {
 				track->last_seen = now;
 				track->label = detection.label;
 
-				const double gray_ratio = computeGrayRatio(frame, track->bbox);
-				const bool gray_now = gray_ratio >= hit_gray_ratio_thresh_;
-				const bool gray_rise =
-					gray_now && track->last_gray_ratio < hit_gray_ratio_thresh_;
-				const bool fire_recent =
-					track->last_fire.nanoseconds() > 0 &&
-					(now - track->last_fire).nanoseconds() <=
-						static_cast<int64_t>(std::max(1, hit_confirm_window_ms_)) *
-							1000000LL;
-				if (gray_rise && fire_recent) {
-					track->last_hit = now;
-					track->hit_count += 1;
-					RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 300,
-						"Hit confirmed: track=%d hit_count=%d gray_ratio=%.2f",
-						track->id, track->hit_count, gray_ratio);
-				}
-				track->last_gray_ratio = gray_ratio;
+				const cv::Point2f center_roi(
+					static_cast<float>(box.x + box.width * 0.5f),
+					static_cast<float>(box.y + box.height * 0.5f));
 
-				const bool in_gray_cooldown =
-					track->last_hit.nanoseconds() > 0 &&
-					(now - track->last_hit).nanoseconds() <=
-						static_cast<int64_t>(std::max(1, gray_cooldown_ms_)) * 1000000LL;
-
-				// 1) 贴边目标优先：降低“丢失敌方目标 -1 分”风险
-				const float dx_edge =
-					std::min(cx, static_cast<float>(frame.cols - 1) - cx);
-				const float dy_edge =
-					std::min(cy, static_cast<float>(frame.rows - 1) - cy);
-				const float min_edge = std::max(0.0f, std::min(dx_edge, dy_edge));
-				const double t_edge =
-					static_cast<double>(min_edge) /
-					std::max(1.0, enemy_speed_max_px_s_);
-				const double edge_urgency = 1.0 / (0.08 + t_edge);
-
-				// 2) 命中概率：中心更稳定，且考虑飞行时间内目标可能位移
-				const double center_dist_norm =
-					std::abs(static_cast<double>(cx - frame_cx)) /
-					std::max(1.0, static_cast<double>(frame_cx));
-				const double center_score =
-					std::clamp(1.0 - center_dist_norm, 0.0, 1.0);
-
-				const double yaw_move_penalty =
-					last_selected_valid_
-						? std::abs(static_cast<double>(cx - last_selected_center_.x)) /
-							  std::max(1.0, static_cast<double>(frame.cols))
-						: 0.0;
-
-				const double flight_t =
-					std::abs(static_cast<double>(frame_cy - cy)) /
-					std::max(1.0, bullet_speed_px_s_);
-				const double drift_px = enemy_speed_max_px_s_ * flight_t;
-				const double hit_prob_score = 1.0 / (1.0 + drift_px / 35.0);
-
-				// 3) 保持火力连续：尽量先打完当前目标（完整击毁收益更高）
-				double finish_bonus = 0.0;
-				if (!in_gray_cooldown && last_selected_track_id_ == track_id) {
-					finish_bonus = 1.2 + 0.2 * std::min(10, target_lock_frames_);
-				} else if (!in_gray_cooldown && last_selected_valid_) {
-					const double d = std::hypot(
-						static_cast<double>(cx - last_selected_center_.x),
-						static_cast<double>(cy - last_selected_center_.y));
-					const double scale =
-						std::max(12.0, static_cast<double>(std::max(box.width, box.height)));
-					if (d < 1.6 * scale) {
-						finish_bonus = 0.8 + 0.2 * std::min(8, target_lock_frames_);
-					}
-				}
-
-				const double gray_penalty = 3.4 * (in_gray_cooldown ? 1.0 : 0.0);
-				const double gray_soft_penalty = 1.8 * gray_ratio;
-				const double switch_bonus =
-					(last_selected_track_id_ >= 0 && last_selected_track_id_ != track_id &&
-					 !in_gray_cooldown)
-						? 0.9
-						: 0.0;
-
-				double commit_bonus = 0.0;
-				if (last_selected_track_id_ == track_id &&
-					last_track_switch_time_.nanoseconds() > 0 &&
-					(now - last_track_switch_time_).nanoseconds() <=
-						static_cast<int64_t>(std::max(1, target_commit_ms_)) *
-							1000000LL) {
-					commit_bonus = 1.2;
-				}
-
-				const double area_score = static_cast<double>(box.area()) / roi_area;
-				const double total_score =
-					2.5 * edge_urgency + center_bias_w_ * center_score +
-					1.6 * hit_prob_score + 2.0 * finish_bonus + 0.8 * area_score +
-					switch_bonus + commit_bonus - gray_penalty - gray_soft_penalty -
-					yaw_move_penalty_w_ * yaw_move_penalty;
-
-				if (total_score > best_score) {
-					best_score = total_score;
-					best_in_gray = in_gray_cooldown;
-					best_box = box;
-					selected_track_id = track_id;
-					best_center = cv::Point2f(
-						static_cast<float>(box.x + box.width * 0.5f),
-						static_cast<float>(box.y + box.height * 0.5f));
-				}
-
-				if (track_id == last_selected_track_id_) {
-					current_visible = true;
-					current_in_gray = in_gray_cooldown;
-					current_score = total_score;
-					current_box = box;
-					current_center = cv::Point2f(
-						static_cast<float>(box.x + box.width * 0.5f),
-						static_cast<float>(box.y + box.height * 0.5f));
+				if (track_id < earliest_any_track_id) {
+					earliest_any_track_id = track_id;
+					earliest_any_box = box;
+					earliest_any_center = center_roi;
+					has_any_target = true;
 				}
 			}
 
-			if (current_visible && last_selected_track_id_ >= 0 &&
-				selected_track_id != last_selected_track_id_) {
-				const bool recent_switch =
-					last_track_switch_time_.nanoseconds() > 0 &&
-					(now - last_track_switch_time_).nanoseconds() <=
-						static_cast<int64_t>(std::max(1, switch_min_interval_ms_)) *
-							1000000LL;
-				const double lock_margin =
-					switch_score_margin_ + 0.15 * std::min(12, target_lock_frames_);
-				const bool strong_better = best_score > current_score + lock_margin;
-				const bool keep_current =
-					recent_switch || (!strong_better && !current_in_gray) ||
-					(best_in_gray && !current_in_gray);
-				if (keep_current) {
-					selected_track_id = last_selected_track_id_;
-					best_box = current_box;
-					best_center = current_center;
-				}
+			if (has_any_target) {
+				selected_track_id = earliest_any_track_id;
+				selected.bbox = earliest_any_box;
+				selected.center = earliest_any_center;
+				selected.area = static_cast<double>(earliest_any_box.area());
 			}
-
-			selected.bbox = best_box;
-			selected.center = best_center;
-			selected.area = static_cast<double>(best_box.area());
 		}
 
 		const float x = selected.center.x + static_cast<float>(crop.x);
@@ -441,33 +305,8 @@ class AutoAimNode : public ImageProcessorNode {
 		cv::Rect bbox;
 		rclcpp::Time last_seen{0, 0, RCL_ROS_TIME};
 		rclcpp::Time last_fire{0, 0, RCL_ROS_TIME};
-		rclcpp::Time last_hit{0, 0, RCL_ROS_TIME};
-		double last_gray_ratio = 0.0;
-		int hit_count = 0;
 		std::string label;
 	};
-
-	double computeGrayRatio(const cv::Mat &frame, const cv::Rect &rect) const {
-		cv::Rect r = rect & cv::Rect(0, 0, frame.cols, frame.rows);
-		if (r.area() <= 0) {
-			return 0.0;
-		}
-
-		cv::Mat roi = frame(r);
-		if (roi.empty()) {
-			return 0.0;
-		}
-
-		cv::Mat hsv;
-		cv::cvtColor(roi, hsv, cv::COLOR_BGR2HSV);
-		cv::Mat low_s, gray_mask;
-		cv::inRange(hsv, cv::Scalar(0, 0, std::max(0, gray_v_min_)),
-					cv::Scalar(180, std::max(0, gray_s_max_), 255), low_s);
-		gray_mask = low_s;
-		const int total = std::max(1, r.area());
-		const int gray = cv::countNonZero(gray_mask);
-		return static_cast<double>(gray) / static_cast<double>(total);
-	}
 
 	TrackState *findTrackById(int id) {
 		for (auto &t : tracks_) {
@@ -540,11 +379,6 @@ class AutoAimNode : public ImageProcessorNode {
 	rclcpp::TimerBase::SharedPtr fire_timer_;
 	double bullet_speed_px_s_;
 	double enemy_speed_max_px_s_;
-	int gray_s_max_;
-	int gray_v_min_;
-	double hit_gray_ratio_thresh_;
-	int hit_confirm_window_ms_;
-	int gray_cooldown_ms_;
 	double track_match_px_;
 	int target_commit_ms_;
 	int hold_lost_grace_ms_;

@@ -1,0 +1,48 @@
+[0.005s] Invoking command in '/home/zdk/work/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/work/homework2026/build/cilent -- -j32 -l32
+[0.035s] [35m[1mConsolidate compiler generated dependencies of target image_processor[0m
+[0.042s] [ 25%] Built target kalman_filter
+[0.042s] [ 37%] [32mBuilding CXX object CMakeFiles/serial_sender.dir/src/serial_sender.cpp.o[0m
+[0.045s] [ 50%] [32mBuilding CXX object CMakeFiles/image_processor.dir/src/image_processor.cpp.o[0m
+[0.190s] [ 62%] [32m[1mLinking CXX static library libserial_sender.a[0m
+[0.209s] [ 62%] Built target serial_sender
+[3.994s] [ 75%] [32m[1mLinking CXX static library libimage_processor.a[0m
+[4.065s] [ 75%] Built target image_processor
+[4.072s] [35m[1mConsolidate compiler generated dependencies of target cilent_main[0m
+[4.084s] [ 87%] [32mBuilding CXX object CMakeFiles/cilent_main.dir/src/main.cpp.o[0m
+[6.079s] [100%] [32m[1mLinking CXX executable cilent_main[0m
+[6.408s] [100%] Built target cilent_main
+[6.417s] Invoked command in '/home/zdk/work/homework2026/build/cilent' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/work/homework2026/build/cilent -- -j32 -l32
+[6.426s] Invoking command in '/home/zdk/work/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/zdk/work/homework2026/build/cilent
+[6.432s] -- Install configuration: ""
+[6.432s] -- Installing: /home/zdk/work/homework2026/install/cilent/lib/libkalman_filter.a
+[6.434s] -- Up-to-date: /home/zdk/work/homework2026/install/cilent/include
+[6.434s] -- Up-to-date: /home/zdk/work/homework2026/install/cilent/include/cilent
+[6.434s] -- Up-to-date: /home/zdk/work/homework2026/install/cilent/include/cilent/image_processor.h
+[6.434s] -- Installing: /home/zdk/work/homework2026/install/cilent/include/cilent/serial_sender.h
+[6.434s] -- Installing: /home/zdk/work/homework2026/install/cilent/include/cilent/kalman_filter.h
+[6.434s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/library_path.sh
+[6.435s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/library_path.dsv
+[6.435s] -- Installing: /home/zdk/work/homework2026/install/cilent/lib/libimage_processor.a
+[6.442s] -- Installing: /home/zdk/work/homework2026/install/cilent/lib/libserial_sender.a
+[6.442s] -- Installing: /home/zdk/work/homework2026/install/cilent/lib/cilent/cilent_main
+[6.447s] -- Set runtime path of "/home/zdk/work/homework2026/install/cilent/lib/cilent/cilent_main" to ""
+[6.447s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/ament_index/resource_index/package_run_dependencies/cilent
+[6.447s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/ament_index/resource_index/parent_prefix_path/cilent
+[6.447s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/ament_prefix_path.sh
+[6.447s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/ament_prefix_path.dsv
+[6.447s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/path.sh
+[6.447s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/environment/path.dsv
+[6.447s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/local_setup.bash
+[6.447s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/local_setup.sh
+[6.447s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/local_setup.zsh
+[6.447s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/local_setup.dsv
+[6.448s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/package.dsv
+[6.448s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/ament_index/resource_index/packages/cilent
+[6.448s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/export_cilentExport.cmake
+[6.448s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/export_cilentExport-noconfig.cmake
+[6.448s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/ament_cmake_export_targets-extras.cmake
+[6.448s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/ament_cmake_export_dependencies-extras.cmake
+[6.448s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/cilentConfig.cmake
+[6.448s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/cmake/cilentConfig-version.cmake
+[6.449s] -- Installing: /home/zdk/work/homework2026/install/cilent/share/cilent/package.xml
+[6.450s] Invoked command in '/home/zdk/work/homework2026/build/cilent' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/zdk/work/homework2026/build/cilent
