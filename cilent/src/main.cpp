@@ -45,6 +45,16 @@ class AutoAimNode : public ImageProcessorNode {
 			fire_cooldown_ms_(declare_parameter<int>("fire_cooldown_ms", 50)),
 			edge_ignore_px_(declare_parameter<int>("edge_ignore_px", 20)),
 			lead_time_s_(declare_parameter<double>("lead_time_s", 0.0)),
+			lead_y_comp_start_ratio_(
+				declare_parameter<double>("lead_y_comp_start_ratio", 0.55)),
+			lead_y_comp_scale_bottom_(
+				declare_parameter<double>("lead_y_comp_scale_bottom", 0.65)),
+			lead_y_comp_fixed_px_bottom_(
+				declare_parameter<double>("lead_y_comp_fixed_px_bottom", 8.0)),
+			lead_center_window_ratio_(
+				declare_parameter<double>("lead_center_window_ratio", 0.22)),
+			lead_center_scale_min_(
+				declare_parameter<double>("lead_center_scale_min", 0.45)),
 			kf_sigma_a_(declare_parameter<double>("kf_sigma_a", 120.0)),
 			kf_sigma_z_(declare_parameter<double>("kf_sigma_z", 0.1)),
 			target_reset_ms_(declare_parameter<int>("target_reset_ms", 300)),
@@ -180,8 +190,10 @@ class AutoAimNode : public ImageProcessorNode {
 					std::clamp(flight_time_s + latency_comp_s, 0.0, 0.5);
 				const Eigen::Vector2d lead_xy =
 					track_kf.predictAhead(lead_time_dynamic_s);
-				const cv::Point2f lead_point(static_cast<float>(lead_xy.x()),
-										 static_cast<float>(lead_xy.y()));
+				const cv::Point2f raw_lead_point(static_cast<float>(lead_xy.x()),
+											   static_cast<float>(lead_xy.y()));
+				const cv::Point2f lead_point = compensateLeadByY(
+					track->center, raw_lead_point, frame.cols, frame.rows);
 				all_lead_points.push_back(lead_point);
 				lead_point_by_track[track_id] = lead_point;
 
@@ -429,6 +441,54 @@ class AutoAimNode : public ImageProcessorNode {
 		return t.id;
 	}
 
+	cv::Point2f compensateLeadByY(const cv::Point2f &meas_point,
+							 const cv::Point2f &lead_point,
+							 int frame_cols,
+							 int frame_rows) const {
+		if (frame_rows <= 1 || frame_cols <= 1) {
+			return lead_point;
+		}
+
+		const double y01 = std::clamp(
+			static_cast<double>(meas_point.y) /
+				static_cast<double>(frame_rows - 1),
+			0.0, 1.0);
+		const double start = std::clamp(lead_y_comp_start_ratio_, 0.0, 1.0);
+		if (y01 <= start || start >= 1.0) {
+			return lead_point;
+		}
+
+		const double blend = std::clamp((y01 - start) / (1.0 - start), 0.0, 1.0);
+		const double bottom_scale = std::clamp(lead_y_comp_scale_bottom_, 0.0, 1.0);
+		const double y_scale = 1.0 - (1.0 - bottom_scale) * blend;
+
+		const double x_center = (static_cast<double>(frame_cols) - 1.0) * 0.5;
+		const double center_norm = std::abs(
+			static_cast<double>(meas_point.x) - x_center) /
+			std::max(1.0, x_center);
+		const double center_window = std::clamp(lead_center_window_ratio_, 0.01, 1.0);
+		const double center_blend = std::clamp(1.0 - center_norm / center_window, 0.0, 1.0);
+		const double center_min = std::clamp(lead_center_scale_min_, 0.0, 1.0);
+		const double center_scale = 1.0 - (1.0 - center_min) * center_blend;
+
+		const double dx = static_cast<double>(lead_point.x - meas_point.x);
+		double compensated_dx = dx * y_scale * center_scale;
+
+		const double fixed_pull_raw =
+			std::max(0.0, lead_y_comp_fixed_px_bottom_) * blend;
+		const double fixed_pull_cap = std::abs(compensated_dx) * 0.45;
+		const double fixed_pull = std::min(fixed_pull_raw, fixed_pull_cap);
+		if (compensated_dx > 0.0) {
+			compensated_dx = std::max(0.0, compensated_dx - fixed_pull);
+		} else if (compensated_dx < 0.0) {
+			compensated_dx = std::min(0.0, compensated_dx + fixed_pull);
+		}
+
+		cv::Point2f out = lead_point;
+		out.x = static_cast<float>(meas_point.x + compensated_dx);
+		return out;
+	}
+
 	std::string serial_device_;
 	SerialSender sender_;
 	rclcpp::TimerBase::SharedPtr fire_timer_;
@@ -449,6 +509,11 @@ class AutoAimNode : public ImageProcessorNode {
 	int fire_cooldown_ms_;
 	int edge_ignore_px_;
 	double lead_time_s_;
+	double lead_y_comp_start_ratio_;
+	double lead_y_comp_scale_bottom_;
+	double lead_y_comp_fixed_px_bottom_;
+	double lead_center_window_ratio_;
+	double lead_center_scale_min_;
 	double kf_sigma_a_;
 	double kf_sigma_z_;
 	int target_reset_ms_;
