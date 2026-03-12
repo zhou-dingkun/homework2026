@@ -21,6 +21,7 @@ class ImageProcessorNode : public rclcpp::Node {
     cv::Point2f center;
     cv::Rect bbox;
     std::vector<cv::Rect> boxes;
+    std::vector<std::string> box_labels;
     double area = 0.0;
     std::string label;
   };

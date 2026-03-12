@@ -450,19 +450,22 @@ ImageProcessorNode::DetectionResult ImageProcessorNode::detectTarget(
     return mask;
   };
 
-  std::vector<std::string> enemy_colors;
-  if (preferred == "red") {
-    enemy_colors = {"blue"};
-  } else if (preferred == "blue") {
-    enemy_colors = {"red"};
-  } else {
+  const std::vector<std::string> scan_colors = {"red", "blue"};
+
+  auto is_enemy_color = [&](const std::string &label) -> bool {
+    if (preferred == "red") {
+      return label == "blue";
+    }
+    if (preferred == "blue") {
+      return label == "red";
+    }
     // 无法判定自车颜色时，保守地把红蓝都视为敌方
-    enemy_colors = {"red", "blue"};
-  }
+    return label == "red" || label == "blue";
+  };
 
   double best_score = -std::numeric_limits<double>::infinity();
 
-  for (const auto &label : enemy_colors) {
+  for (const auto &label : scan_colors) {
     cv::Mat mask = build_mask(label);
     if (mask.empty()) {
       continue;
@@ -543,10 +546,11 @@ ImageProcessorNode::DetectionResult ImageProcessorNode::detectTarget(
         }
 
         best.boxes.push_back(armor);
+        best.box_labels.push_back(label);
 
         const double area = static_cast<double>(armor.area());
         const double score = area - y_diff * 10.0 - std::abs(h1 - h2) * 8.0;
-        if (!best.found || score > best_score) {
+        if (is_enemy_color(label) && (!best.found || score > best_score)) {
           best_score = score;
           best.found = true;
           best.area = area;

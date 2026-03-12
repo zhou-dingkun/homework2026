@@ -57,6 +57,10 @@ class AutoAimNode : public ImageProcessorNode {
 				declare_parameter<double>("lead_center_scale_min", 0.3)),  // 中心最小保留比例；调小中心更稳但跟随更慢。
 			kf_sigma_a_(declare_parameter<double>("kf_sigma_a", 80.0)),  // KF过程噪声(加速度)；调大更灵敏，调小更平滑。
 			kf_sigma_z_(declare_parameter<double>("kf_sigma_z", 0.1)),  // KF测量噪声；调大更依赖预测，调小更跟随检测框。
+			friend_fire_block_margin_px_(
+				declare_parameter<double>("friend_fire_block_margin_px", 25.0)),  // 友军防误伤走廊外扩(px)；调大更保守。
+			friend_fire_block_min_radius_px_(
+				declare_parameter<double>("friend_fire_block_min_radius_px", 30.0)),  // 友军最小保护半径(px)；调大更保守。
 			target_reset_ms_(declare_parameter<int>("target_reset_ms", 100)),  // 丢目标后恢复开火等待(ms)；调大更谨慎，调小恢复更快。
 			auto_fire_(declare_parameter<bool>("auto_fire", true)),  // 自动开火开关；false 时只转向不发火。
 			last_fire_time_(0, 0, RCL_ROS_TIME),
@@ -132,17 +136,47 @@ class AutoAimNode : public ImageProcessorNode {
 		std::vector<int> all_lead_track_ids;
 		std::unordered_map<int, cv::Point2f> lead_point_by_track;
 		std::unordered_map<int, cv::Rect> box_by_track;
+		std::unordered_map<int, std::string> label_by_track;
+		std::unordered_map<int, cv::Rect> bbox_abs_by_track;
+		std::unordered_map<int, cv::Point2f> center_abs_by_track;
+		std::vector<int> enemy_track_ids;
+		std::vector<int> friendly_track_ids;
 		all_lead_points.reserve(detection.boxes.size());
 		all_lead_track_ids.reserve(detection.boxes.size());
 		lead_point_by_track.reserve(detection.boxes.size());
 		box_by_track.reserve(detection.boxes.size());
+		label_by_track.reserve(detection.boxes.size());
+		bbox_abs_by_track.reserve(detection.boxes.size());
+		center_abs_by_track.reserve(detection.boxes.size());
+		enemy_track_ids.reserve(detection.boxes.size());
+		friendly_track_ids.reserve(detection.boxes.size());
+
+		auto has_track = [](const std::vector<int> &ids, int id) {
+			return std::find(ids.begin(), ids.end(), id) != ids.end();
+		};
+		auto is_enemy_label = [&](const std::string &label) {
+			if (own_color == "red") {
+				return label == "blue";
+			}
+			if (own_color == "blue") {
+				return label == "red";
+			}
+			return label == "red" || label == "blue";
+		};
+		auto is_friendly_label = [&](const std::string &label) {
+			return (own_color == "red" || own_color == "blue") && label == own_color;
+		};
+
 		if (!detection.boxes.empty()) {
 			int detector_best_track_id = -1;
 
-			for (const auto &box : detection.boxes) {
+			for (size_t i = 0; i < detection.boxes.size(); ++i) {
+				const auto &box = detection.boxes[i];
 				if (box.width <= 0 || box.height <= 0) {
 					continue;
 				}
+				const std::string label =
+					(i < detection.box_labels.size()) ? detection.box_labels[i] : detection.label;
 
 				const float cx =
 					static_cast<float>(box.x + box.width * 0.5f + crop.x);
@@ -159,7 +193,7 @@ class AutoAimNode : public ImageProcessorNode {
 				track->bbox = cv::Rect(box.x + crop.x, box.y + crop.y,
 											 box.width, box.height);
 				track->last_seen = now;
-				track->label = detection.label;
+				track->label = label;
 
 				auto [kf_it, inserted] = track_kfs_.emplace(
 					track_id, KalmanFilterCV2D(0.02, kf_sigma_a_, kf_sigma_z_));
@@ -199,7 +233,18 @@ class AutoAimNode : public ImageProcessorNode {
 				all_lead_track_ids.push_back(track_id);
 				lead_point_by_track[track_id] = lead_point;
 				box_by_track[track_id] = box;
-				if (box == detection.bbox) {
+				label_by_track[track_id] = label;
+				bbox_abs_by_track[track_id] = track->bbox;
+				center_abs_by_track[track_id] = track->center;
+
+				if (is_enemy_label(label) && !has_track(enemy_track_ids, track_id)) {
+					enemy_track_ids.push_back(track_id);
+				}
+				if (is_friendly_label(label) && !has_track(friendly_track_ids, track_id)) {
+					friendly_track_ids.push_back(track_id);
+				}
+
+				if (is_enemy_label(label) && box == detection.bbox) {
 					detector_best_track_id = track_id;
 				}
 			}
@@ -207,13 +252,14 @@ class AutoAimNode : public ImageProcessorNode {
 			// Keep lock on the previous track when it is still visible to avoid
 			// left-right jitter from switching between multiple candidate boxes.
 			if (last_selected_track_id_ >= 0 &&
+				has_track(enemy_track_ids, last_selected_track_id_) &&
 				lead_point_by_track.find(last_selected_track_id_) !=
 					lead_point_by_track.end()) {
 				selected_track_id = last_selected_track_id_;
 			} else if (detector_best_track_id >= 0) {
 				selected_track_id = detector_best_track_id;
-			} else if (!all_lead_track_ids.empty()) {
-				selected_track_id = all_lead_track_ids.front();
+			} else if (!enemy_track_ids.empty()) {
+				selected_track_id = enemy_track_ids.front();
 			}
 
 			auto selected_box_it = box_by_track.find(selected_track_id);
@@ -224,11 +270,129 @@ class AutoAimNode : public ImageProcessorNode {
 					static_cast<float>(sel_box.x + sel_box.width * 0.5f),
 					static_cast<float>(sel_box.y + sel_box.height * 0.5f));
 				selected.area = static_cast<double>(sel_box.area());
+				auto label_it = label_by_track.find(selected_track_id);
+				if (label_it != label_by_track.end()) {
+					selected.label = label_it->second;
+				}
 			}
 		}
 
-		const float x = selected.center.x + static_cast<float>(crop.x);
-		const float y = selected.center.y + static_cast<float>(crop.y);
+		float x = selected.center.x + static_cast<float>(crop.x);
+		float y = selected.center.y + static_cast<float>(crop.y);
+
+		if (all_lead_points.empty()) {
+			all_lead_points.push_back(cv::Point2f(x, y));
+			all_lead_track_ids.push_back(selected_track_id);
+		}
+
+		const double travel_px =
+			std::abs(static_cast<double>(x) - static_cast<double>(x_center));
+		const double flight_time_s = travel_px / bullet_speed;
+		const double lead_time_dynamic_s =
+			std::clamp(flight_time_s + latency_comp_s, 0.0, 0.5);
+
+		cv::Point2f lead_point(x, y);
+		auto lead_it = lead_point_by_track.find(selected_track_id);
+		if (lead_it != lead_point_by_track.end()) {
+			lead_point = lead_it->second;
+		}
+
+		bool fire_blocked_by_friend = false;
+		auto point_segment_distance_sq = [](const cv::Point2f &p,
+										 const cv::Point2f &a,
+										 const cv::Point2f &b) {
+			const cv::Point2f ab = b - a;
+			const cv::Point2f ap = p - a;
+			const float ab_len_sq = ab.dot(ab);
+			if (ab_len_sq <= 1e-6f) {
+				const cv::Point2f d = p - a;
+				return static_cast<double>(d.dot(d));
+			}
+			const float t = std::clamp(ap.dot(ab) / ab_len_sq, 0.0f, 1.0f);
+			const cv::Point2f nearest = a + ab * t;
+			const cv::Point2f d = p - nearest;
+			return static_cast<double>(d.dot(d));
+		};
+		auto is_track_safe_to_fire = [&](int track_id) {
+			if (!(own_color == "red" || own_color == "blue")) {
+				return true;
+			}
+			if (friendly_track_ids.empty()) {
+				return true;
+			}
+			auto aim_it = lead_point_by_track.find(track_id);
+			if (aim_it == lead_point_by_track.end()) {
+				return false;
+			}
+
+			const cv::Point2f muzzle_point(
+				(static_cast<float>(frame.cols) - 1.0f) * 0.5f,
+				static_cast<float>(frame.rows - 1));
+			const cv::Point2f aim_point = aim_it->second;
+
+			for (int friend_id : friendly_track_ids) {
+				auto c_it = center_abs_by_track.find(friend_id);
+				auto b_it = bbox_abs_by_track.find(friend_id);
+				if (c_it == center_abs_by_track.end() || b_it == bbox_abs_by_track.end()) {
+					continue;
+				}
+				const cv::Rect &fb = b_it->second;
+				const double diag = std::hypot(
+					static_cast<double>(fb.width),
+					static_cast<double>(fb.height));
+				const double protect_radius = std::max(
+					friend_fire_block_min_radius_px_,
+					0.5 * diag + std::max(0.0, friend_fire_block_margin_px_));
+				const double d2 = point_segment_distance_sq(c_it->second, muzzle_point, aim_point);
+				if (d2 <= protect_radius * protect_radius) {
+					return false;
+				}
+			}
+			return true;
+		};
+
+		if (selected_track_id >= 0 && !is_track_safe_to_fire(selected_track_id)) {
+			int safe_enemy_track_id = -1;
+			for (int candidate_id : enemy_track_ids) {
+				if (candidate_id == selected_track_id) {
+					continue;
+				}
+				if (is_track_safe_to_fire(candidate_id)) {
+					safe_enemy_track_id = candidate_id;
+					break;
+				}
+			}
+
+			if (safe_enemy_track_id >= 0) {
+				selected_track_id = safe_enemy_track_id;
+				auto selected_box_it = box_by_track.find(selected_track_id);
+				if (selected_box_it != box_by_track.end()) {
+					const cv::Rect &sel_box = selected_box_it->second;
+					selected.bbox = sel_box;
+					selected.center = cv::Point2f(
+						static_cast<float>(sel_box.x + sel_box.width * 0.5f),
+						static_cast<float>(sel_box.y + sel_box.height * 0.5f));
+					selected.area = static_cast<double>(sel_box.area());
+				}
+				auto label_it = label_by_track.find(selected_track_id);
+				if (label_it != label_by_track.end()) {
+					selected.label = label_it->second;
+				}
+				auto new_lead_it = lead_point_by_track.find(selected_track_id);
+				if (new_lead_it != lead_point_by_track.end()) {
+					lead_point = new_lead_it->second;
+				}
+				RCLCPP_INFO_THROTTLE(
+					get_logger(), *get_clock(), 300,
+					"Track switched for safe fire (%d->%d)",
+					last_selected_track_id_, selected_track_id);
+			} else {
+				fire_blocked_by_friend = true;
+			}
+		}
+
+		x = selected.center.x + static_cast<float>(crop.x);
+		y = selected.center.y + static_cast<float>(crop.y);
 		const bool track_switched =
 			(selected_track_id >= 0) &&
 			(selected_track_id != last_selected_track_id_);
@@ -251,22 +415,6 @@ class AutoAimNode : public ImageProcessorNode {
 				last_selected_track_id_, selected_track_id);
 		}
 
-		if (all_lead_points.empty()) {
-			all_lead_points.push_back(cv::Point2f(x, y));
-			all_lead_track_ids.push_back(selected_track_id);
-		}
-
-		const double travel_px =
-			std::abs(static_cast<double>(x) - static_cast<double>(x_center));
-		const double flight_time_s = travel_px / bullet_speed;
-		const double lead_time_dynamic_s =
-			std::clamp(flight_time_s + latency_comp_s, 0.0, 0.5);
-
-		cv::Point2f lead_point(x, y);
-		auto lead_it = lead_point_by_track.find(selected_track_id);
-		if (lead_it != lead_point_by_track.end()) {
-			lead_point = lead_it->second;
-		}
 		const float lead_x = lead_point.x;
 		maybeSaveDebugImages(frame, crop, selected, &lead_point, &all_lead_points,
 									&all_lead_track_ids);
@@ -303,7 +451,12 @@ class AutoAimNode : public ImageProcessorNode {
 				"Fire blocked: auto_fire=false");
 		}
 
-		if ((own_color == "red" || own_color == "blue") &&
+		if (fire_blocked_by_friend) {
+			stop_firing_ = true;
+			RCLCPP_INFO_THROTTLE(
+				get_logger(), *get_clock(), 500,
+				"Fire blocked: friendly in predicted fire corridor");
+		} else if ((own_color == "red" || own_color == "blue") &&
 			selected.label == own_color) {
 			stop_firing_ = true;
 			RCLCPP_INFO_THROTTLE(
@@ -528,6 +681,8 @@ class AutoAimNode : public ImageProcessorNode {
 	double lead_center_scale_min_;
 	double kf_sigma_a_;
 	double kf_sigma_z_;
+	double friend_fire_block_margin_px_;
+	double friend_fire_block_min_radius_px_;
 	int target_reset_ms_;
 	bool auto_fire_;
 	rclcpp::Time last_fire_time_;
