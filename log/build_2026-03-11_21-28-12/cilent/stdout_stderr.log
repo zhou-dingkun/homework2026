@@ -1,0 +1,11 @@
+[ 25%] Built target kalman_filter
+[ 50%] Built target serial_sender
+[ 62%] [32mBuilding CXX object CMakeFiles/image_processor.dir/src/image_processor.cpp.o[0m
+[01m[K/home/zdk/work/homework2026/cilent/src/image_processor.cpp:[m[K In constructor ‘[01m[Kcilent::ImageProcessorNode::ImageProcessorNode(const rclcpp::NodeOptions&)[m[K’:
+[01m[K/home/zdk/work/homework2026/cilent/src/image_processor.cpp:41:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kpair_max_dx_[m[K’ was not declared in this scope; did you mean ‘[01m[Kpair_min_dx_[m[K’?
+   41 |   [01;31m[Kpair_max_dx_[m[K = declare_parameter<int>("pair_max_dx", 80);
+      |   [01;31m[K^~~~~~~~~~~~[m[K
+      |   [32m[Kpair_min_dx_[m[K
+gmake[2]: *** [CMakeFiles/image_processor.dir/build.make:76：CMakeFiles/image_processor.dir/src/image_processor.cpp.o] 错误 1
+gmake[1]: *** [CMakeFiles/Makefile2:169：CMakeFiles/image_processor.dir/all] 错误 2
+gmake: *** [Makefile:146：all] 错误 2

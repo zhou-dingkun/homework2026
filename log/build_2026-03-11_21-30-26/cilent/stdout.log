@@ -1,0 +1,4 @@
+[35m[1mConsolidate compiler generated dependencies of target image_processor[0m
+[ 25%] Built target serial_sender
+[ 50%] Built target kalman_filter
+[ 62%] [32mBuilding CXX object CMakeFiles/image_processor.dir/src/image_processor.cpp.o[0m

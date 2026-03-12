@@ -4,6 +4,7 @@
 #include <limits>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include <cv_bridge/cv_bridge.h>
@@ -50,11 +51,8 @@ class AutoAimNode : public ImageProcessorNode {
 			auto_fire_(declare_parameter<bool>("auto_fire", true)),
 			last_fire_time_(0, 0, RCL_ROS_TIME),
 			last_target_lost_time_(0, 0, RCL_ROS_TIME),
-			last_meas_time_(0, 0, RCL_ROS_TIME),
 			last_yaw_send_time_(0, 0, RCL_STEADY_TIME),
-			stop_firing_(false),
-			kf_(0.02, kf_sigma_a_, kf_sigma_z_),
-			kf_initialized_(false) {
+			stop_firing_(false) {
 		if (!sender_.open()) {
 			RCLCPP_WARN(get_logger(), "Failed to open serial device %s",
 								serial_device_.c_str());
@@ -121,7 +119,9 @@ class AutoAimNode : public ImageProcessorNode {
 		const double bullet_speed = std::max(1.0, bullet_speed_px_s_);
 		const double latency_comp_s = std::max(0.0, lead_time_s_);
 		std::vector<cv::Point2f> all_lead_points;
+		std::unordered_map<int, cv::Point2f> lead_point_by_track;
 		all_lead_points.reserve(detection.boxes.size());
+		lead_point_by_track.reserve(detection.boxes.size());
 		if (!detection.boxes.empty()) {
 			int earliest_any_track_id = std::numeric_limits<int>::max();
 			bool has_any_target = false;
@@ -150,18 +150,40 @@ class AutoAimNode : public ImageProcessorNode {
 				track->last_seen = now;
 				track->label = detection.label;
 
+				auto [kf_it, inserted] = track_kfs_.emplace(
+					track_id, KalmanFilterCV2D(0.02, kf_sigma_a_, kf_sigma_z_));
+				if (inserted) {
+					kf_it->second.reset(cx, cy, 0.0, 0.0);
+					track_kf_last_meas_time_[track_id] = now;
+				}
+
+				KalmanFilterCV2D &track_kf = kf_it->second;
+				track_kf.setProcessNoise(kf_sigma_a_);
+				track_kf.setMeasurementNoise(kf_sigma_z_);
+
+				auto t_it = track_kf_last_meas_time_.find(track_id);
+				if (t_it != track_kf_last_meas_time_.end()) {
+					const double dt = (now - t_it->second).seconds();
+					if (dt > 0.0) {
+						track_kf.setDeltaT(std::clamp(dt, 1e-3, 0.2));
+						track_kf.predict();
+					}
+				}
+				track_kf.update(cx, cy);
+				track_kf_last_meas_time_[track_id] = now;
+
 				const double travel_px =
 					std::abs(static_cast<double>(track->center.x) -
 							 static_cast<double>(x_center));
 				const double flight_time_s = travel_px / bullet_speed;
 				const double lead_time_dynamic_s =
 					std::clamp(flight_time_s + latency_comp_s, 0.0, 0.5);
-				const cv::Point2f lead_point(
-					track->center.x +
-						track->velocity.x * static_cast<float>(lead_time_dynamic_s),
-					track->center.y +
-						track->velocity.y * static_cast<float>(lead_time_dynamic_s));
+				const Eigen::Vector2d lead_xy =
+					track_kf.predictAhead(lead_time_dynamic_s);
+				const cv::Point2f lead_point(static_cast<float>(lead_xy.x()),
+										 static_cast<float>(lead_xy.y()));
 				all_lead_points.push_back(lead_point);
+				lead_point_by_track[track_id] = lead_point;
 
 				const cv::Point2f center_roi(
 					static_cast<float>(box.x + box.width * 0.5f),
@@ -201,29 +223,10 @@ class AutoAimNode : public ImageProcessorNode {
 		const float y_lb = static_cast<float>(frame.rows - 1) - y;
 
 		if (track_switched) {
-			kf_.reset(x, y, 0.0, 0.0);
-			kf_initialized_ = true;
-			last_meas_time_ = now;
 			RCLCPP_INFO_THROTTLE(
 				get_logger(), *get_clock(), 300,
-				"Track switched (%d->%d), KF reset at (%.1f, %.1f)",
-				last_selected_track_id_, selected_track_id, x, y_lb);
-		}
-
-		if (!kf_initialized_) {
-			kf_.reset(x, y, 0.0, 0.0);
-			kf_initialized_ = true;
-			last_meas_time_ = now;
-		} else {
-			const double dt = (now - last_meas_time_).seconds();
-			if (dt > 0.0) {
-				kf_.setDeltaT(dt);
-			}
-			kf_.setProcessNoise(kf_sigma_a_);
-			kf_.setMeasurementNoise(kf_sigma_z_);
-			kf_.predict();
-			kf_.update(x, y);
-			last_meas_time_ = now;
+				"Track switched (%d->%d)",
+				last_selected_track_id_, selected_track_id);
 		}
 
 		if (all_lead_points.empty()) {
@@ -236,10 +239,12 @@ class AutoAimNode : public ImageProcessorNode {
 		const double lead_time_dynamic_s =
 			std::clamp(flight_time_s + latency_comp_s, 0.0, 0.5);
 
-		const Eigen::Vector2d lead = kf_.predictAhead(lead_time_dynamic_s);
-		const float lead_x = static_cast<float>(lead.x());
-		const float lead_y = static_cast<float>(lead.y());
-		const cv::Point2f lead_point(lead_x, lead_y);
+		cv::Point2f lead_point(x, y);
+		auto lead_it = lead_point_by_track.find(selected_track_id);
+		if (lead_it != lead_point_by_track.end()) {
+			lead_point = lead_it->second;
+		}
+		const float lead_x = lead_point.x;
 		maybeSaveDebugImages(frame, crop, selected, &lead_point, &all_lead_points);
 
 		const float norm = (lead_x - x_center) / x_center;
@@ -369,6 +374,15 @@ class AutoAimNode : public ImageProcessorNode {
 					return (now - t.last_seen).nanoseconds() > ttl_ns;
 				}),
 			tracks_.end());
+
+		for (auto it = track_kfs_.begin(); it != track_kfs_.end();) {
+			if (findTrackById(it->first) == nullptr) {
+				track_kf_last_meas_time_.erase(it->first);
+				it = track_kfs_.erase(it);
+			} else {
+				++it;
+			}
+		}
 	}
 
 	int matchOrCreateTrack(const cv::Point2f &center, const rclcpp::Time &now) {
@@ -441,7 +455,6 @@ class AutoAimNode : public ImageProcessorNode {
 	bool auto_fire_;
 	rclcpp::Time last_fire_time_;
 	rclcpp::Time last_target_lost_time_;
-	rclcpp::Time last_meas_time_;
 	rclcpp::Time last_yaw_send_time_;
 	cv::Point2f last_selected_center_{0.0f, 0.0f};
 	bool last_selected_valid_ = false;
@@ -449,10 +462,10 @@ class AutoAimNode : public ImageProcessorNode {
 	rclcpp::Time last_track_switch_time_{0, 0, RCL_ROS_TIME};
 	int target_lock_frames_ = 0;
 	std::vector<TrackState> tracks_;
+	std::unordered_map<int, KalmanFilterCV2D> track_kfs_;
+	std::unordered_map<int, rclcpp::Time> track_kf_last_meas_time_;
 	int next_track_id_ = 1;
 	bool stop_firing_;
-	KalmanFilterCV2D kf_;
-	bool kf_initialized_;
 };
 
 }  // namespace cilent

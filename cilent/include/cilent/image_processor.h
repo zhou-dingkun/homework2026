@@ -72,6 +72,7 @@ class ImageProcessorNode : public rclcpp::Node {
   int marker_max_area_;
   int pair_y_tol_;
   int pair_min_dx_;
+  int pair_max_dx_;
   int bbox_pad_;
 
   std::string debug_save_path_;

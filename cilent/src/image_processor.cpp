@@ -4,6 +4,7 @@
 #include <cmath>
 #include <filesystem>
 #include <iomanip>
+#include <limits>
 #include <sstream>
 #include <vector>
 
@@ -36,7 +37,8 @@ ImageProcessorNode::ImageProcessorNode(const rclcpp::NodeOptions &options)
   marker_min_area_ = declare_parameter<int>("marker_min_area", 40);
   marker_max_area_ = declare_parameter<int>("marker_max_area", 50000);
   pair_y_tol_ = declare_parameter<int>("pair_y_tol", 10);
-  pair_min_dx_ = declare_parameter<int>("pair_min_dx", 50);
+  pair_min_dx_ = declare_parameter<int>("pair_min_dx", 20);
+  pair_max_dx_ = declare_parameter<int>("pair_max_dx", 120);
   bbox_pad_ = declare_parameter<int>("bbox_pad", 6);
   debug_save_path_ =
     declare_parameter<std::string>("debug_save_path",
@@ -452,6 +454,8 @@ ImageProcessorNode::DetectionResult ImageProcessorNode::detectTarget(
     enemy_colors = {"red", "blue"};
   }
 
+  double best_score = -std::numeric_limits<double>::infinity();
+
   for (const auto &label : enemy_colors) {
     cv::Mat mask = build_mask(label);
     if (mask.empty()) {
@@ -468,6 +472,9 @@ ImageProcessorNode::DetectionResult ImageProcessorNode::detectTarget(
 
     std::vector<std::vector<cv::Point>> contours;
     cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+    std::vector<cv::Rect> markers;
+    markers.reserve(contours.size());
+
     for (const auto &contour : contours) {
       const double contour_area = cv::contourArea(contour);
       if (contour_area < static_cast<double>(marker_min_area_) ||
@@ -485,16 +492,63 @@ ImageProcessorNode::DetectionResult ImageProcessorNode::detectTarget(
         continue;
       }
 
-      best.boxes.push_back(rect);
+      markers.push_back(rect);
+    }
 
-      const double area = static_cast<double>(rect.area());
-      if (!best.found || area > best.area) {
-        best.found = true;
-        best.area = area;
-        best.bbox = rect;
-        best.center = cv::Point2f(rect.x + rect.width * 0.5f,
-                                  rect.y + rect.height * 0.5f);
-        best.label = label;
+    if (markers.size() < 2) {
+      continue;
+    }
+
+    for (size_t i = 0; i < markers.size(); ++i) {
+      const cv::Rect &a = markers[i];
+      const float ax = a.x + a.width * 0.5f;
+      const float ay = a.y + a.height * 0.5f;
+      for (size_t j = i + 1; j < markers.size(); ++j) {
+        const cv::Rect &b = markers[j];
+        const float bx = b.x + b.width * 0.5f;
+        const float by = b.y + b.height * 0.5f;
+
+        const double y_diff = std::abs(static_cast<double>(ay - by));
+        if (y_diff > static_cast<double>(std::max(1, pair_y_tol_))) {
+          continue;
+        }
+
+        const double dx = std::abs(static_cast<double>(ax - bx));
+        if (dx < static_cast<double>(std::max(1, pair_min_dx_))||
+            dx > static_cast<double>(std::max(1, pair_max_dx_))) {
+          continue;
+        }
+
+        const double h1 = static_cast<double>(a.height);
+        const double h2 = static_cast<double>(b.height);
+        const double h_ratio = std::max(h1, h2) / std::max(1.0, std::min(h1, h2));
+        if (h_ratio > 2.0) {
+          continue;
+        }
+
+        cv::Rect armor = a | b;
+        const int pad = std::max(0, bbox_pad_);
+        armor.x = std::max(0, armor.x - pad);
+        armor.y = std::max(0, armor.y - pad);
+        armor.width = std::min(roi.cols - armor.x, armor.width + pad * 2);
+        armor.height = std::min(roi.rows - armor.y, armor.height + pad * 2);
+        if (armor.width <= 0 || armor.height <= 0) {
+          continue;
+        }
+
+        best.boxes.push_back(armor);
+
+        const double area = static_cast<double>(armor.area());
+        const double score = area - y_diff * 10.0 - std::abs(h1 - h2) * 8.0;
+        if (!best.found || score > best_score) {
+          best_score = score;
+          best.found = true;
+          best.area = area;
+          best.bbox = armor;
+          best.center = cv::Point2f(armor.x + armor.width * 0.5f,
+                                    armor.y + armor.height * 0.5f);
+          best.label = label;
+        }
       }
     }
   }

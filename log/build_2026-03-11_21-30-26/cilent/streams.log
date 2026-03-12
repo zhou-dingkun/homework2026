@@ -1,0 +1,14 @@
+[0.006s] Invoking command in '/home/zdk/work/homework2026/build/cilent': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/work/homework2026/build/cilent -- -j32 -l32
+[0.037s] [35m[1mConsolidate compiler generated dependencies of target image_processor[0m
+[0.043s] [ 25%] Built target serial_sender
+[0.044s] [ 50%] Built target kalman_filter
+[0.047s] [ 62%] [32mBuilding CXX object CMakeFiles/image_processor.dir/src/image_processor.cpp.o[0m
+[1.207s] [01m[K/home/zdk/work/homework2026/cilent/src/image_processor.cpp:[m[K In constructor ‘[01m[Kcilent::ImageProcessorNode::ImageProcessorNode(const rclcpp::NodeOptions&)[m[K’:
+[1.207s] [01m[K/home/zdk/work/homework2026/cilent/src/image_processor.cpp:41:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kpair_max_dx_[m[K’ was not declared in this scope; did you mean ‘[01m[Kpair_min_dx_[m[K’?
+[1.207s]    41 |   [01;31m[Kpair_max_dx_[m[K = declare_parameter<int>("pair_max_dx", 80);
+[1.207s]       |   [01;31m[K^~~~~~~~~~~~[m[K
+[1.207s]       |   [32m[Kpair_min_dx_[m[K
+[2.321s] gmake[2]: *** [CMakeFiles/image_processor.dir/build.make:76：CMakeFiles/image_processor.dir/src/image_processor.cpp.o] 错误 1
+[2.321s] gmake[1]: *** [CMakeFiles/Makefile2:169：CMakeFiles/image_processor.dir/all] 错误 2
+[2.322s] gmake: *** [Makefile:146：all] 错误 2
+[2.324s] Invoked command in '/home/zdk/work/homework2026/build/cilent' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/zdk/work/homework2026/build/cilent -- -j32 -l32
