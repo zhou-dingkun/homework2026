@@ -41,6 +41,8 @@ class ImageProcessorNode : public rclcpp::Node {
                             const DetectionResult &detection,
                             const cv::Point2f *aim_point = nullptr,
                             const std::vector<cv::Point2f> *all_aim_points =
+                              nullptr,
+                            const std::vector<int> *all_aim_track_ids =
                               nullptr);
   virtual cv::Rect computeCropRect(int width, int height) const;
   virtual cv::Vec3d meanCenterColor(const cv::Mat &frame) const;

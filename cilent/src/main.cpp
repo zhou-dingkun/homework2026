@@ -24,41 +24,41 @@ class AutoAimNode : public ImageProcessorNode {
 													 rclcpp::NodeOptions())
 		: ImageProcessorNode(options),
 			serial_device_(declare_parameter<std::string>("serial_device",
-														 "/dev/pts/8")),
+									 "/dev/pts/8")),  // 串口设备路径；改成实际串口(如 /dev/ttyUSB0)，错了会导致无法发云台/开火指令。
 			sender_(serial_device_),
-			bullet_speed_px_s_(declare_parameter<double>("bullet_speed_px_s", 600.0)),
+			bullet_speed_px_s_(declare_parameter<double>("bullet_speed_px_s", 600.0)),  // 子弹等效像素速度(px/s)；调大提前量变小，调小提前量变大。
 			enemy_speed_max_px_s_(
-				declare_parameter<double>("enemy_speed_max_px_s", 300.0)),
-			track_match_px_(declare_parameter<double>("track_match_px", 90.0)),
-			target_commit_ms_(declare_parameter<int>("target_commit_ms", 220)),
-			hold_lost_grace_ms_(declare_parameter<int>("hold_lost_grace_ms", 260)),
-			switch_score_margin_(declare_parameter<double>("switch_score_margin", 0.9)),
+				declare_parameter<double>("enemy_speed_max_px_s", 300.0)),  // 预留参数(当前未生效)；建议暂不改。
+			track_match_px_(declare_parameter<double>("track_match_px", 90.0)),  // 轨迹匹配门限(px)；调大更容易把近邻目标并成同一轨迹，调小更容易新建轨迹。
+			target_commit_ms_(declare_parameter<int>("target_commit_ms", 220)),  // 预留参数(当前未生效)；建议暂不改。
+			hold_lost_grace_ms_(declare_parameter<int>("hold_lost_grace_ms", 260)),  // 丢目标后保留锁定时长(ms)；调大抗瞬时丢帧更强，调小停火更快。
+			switch_score_margin_(declare_parameter<double>("switch_score_margin", 0.9)),  // 预留参数(当前未生效)；建议暂不改。
 			switch_min_interval_ms_(
-				declare_parameter<int>("switch_min_interval_ms", 180)),
-			yaw_move_penalty_w_(declare_parameter<double>("yaw_move_penalty_w", 1.1)),
-			center_bias_w_(declare_parameter<double>("center_bias_w", 0.25)),
-			yaw_fov_deg_(declare_parameter<double>("yaw_fov_deg", 90.0)),
-			yaw_sign_(declare_parameter<double>("yaw_sign", -1.0)),
-			yaw_offset_deg_(declare_parameter<double>("yaw_offset_deg", 90.0)),
-			yaw_send_interval_ms_(declare_parameter<int>("yaw_send_interval_ms", 120)),
-			fire_x_tol_px_(declare_parameter<int>("fire_x_tol_px", 60)),
-			fire_cooldown_ms_(declare_parameter<int>("fire_cooldown_ms", 50)),
-			edge_ignore_px_(declare_parameter<int>("edge_ignore_px", 20)),
-			lead_time_s_(declare_parameter<double>("lead_time_s", 0.0)),
+				declare_parameter<int>("switch_min_interval_ms", 180)),  // 预留参数(当前未生效)；建议暂不改。
+			yaw_move_penalty_w_(declare_parameter<double>("yaw_move_penalty_w", 1.1)),  // 预留参数(当前未生效)；建议暂不改。
+			center_bias_w_(declare_parameter<double>("center_bias_w", 0.25)),  // 预留参数(当前未生效)；建议暂不改。
+			yaw_fov_deg_(declare_parameter<double>("yaw_fov_deg", 90.0)),  // 像素到yaw映射的视场角；调大同样像素偏差会输出更大yaw。
+			yaw_sign_(declare_parameter<double>("yaw_sign", -1.0)),  // yaw方向符号；方向反了改成 1.0。
+			yaw_offset_deg_(declare_parameter<double>("yaw_offset_deg", 90.0)),  // yaw零点偏置；用于对齐机械中位，调大整体向一侧偏。
+			yaw_send_interval_ms_(declare_parameter<int>("yaw_send_interval_ms", 120)),  // yaw发送周期(ms)；调小更跟手但串口负担更高。
+			fire_x_tol_px_(declare_parameter<int>("fire_x_tol_px", 60)),  // 预留参数(当前未生效)；建议暂不改。
+			fire_cooldown_ms_(declare_parameter<int>("fire_cooldown_ms", 50)),  // 开火最小间隔(ms)；调小射速更快，调大更保守。
+			edge_ignore_px_(declare_parameter<int>("edge_ignore_px", 20)),  // 画面边缘禁射区(px)；调大更安全但会少打边缘目标。
+			lead_time_s_(declare_parameter<double>("lead_time_s", 0.0)),  // 固定延迟补偿(s)；调大整体提前增加，调小整体提前减少。
 			lead_y_comp_start_ratio_(
-				declare_parameter<double>("lead_y_comp_start_ratio", 0.55)),
+				declare_parameter<double>("lead_y_comp_start_ratio", 0.65)),  // 从该y比例开始抑制提前量(0顶端,1底部)；调小更早介入抑制。
 			lead_y_comp_scale_bottom_(
-				declare_parameter<double>("lead_y_comp_scale_bottom", 0.65)),
+				declare_parameter<double>("lead_y_comp_scale_bottom", 0.45)),  // 底部保留比例；调小底部抑制更强，调大更接近原始预测。
 			lead_y_comp_fixed_px_bottom_(
-				declare_parameter<double>("lead_y_comp_fixed_px_bottom", 8.0)),
+				declare_parameter<double>("lead_y_comp_fixed_px_bottom", 80.0)),  // 底部固定回拉(px)；调大可抑制过前，但过大可能变过后。
 			lead_center_window_ratio_(
-				declare_parameter<double>("lead_center_window_ratio", 0.22)),
+				declare_parameter<double>("lead_center_window_ratio", 0.22)),  // 中心抑制窗口占半屏比例；调大中心附近抑制范围更宽。
 			lead_center_scale_min_(
-				declare_parameter<double>("lead_center_scale_min", 0.45)),
-			kf_sigma_a_(declare_parameter<double>("kf_sigma_a", 120.0)),
-			kf_sigma_z_(declare_parameter<double>("kf_sigma_z", 0.1)),
-			target_reset_ms_(declare_parameter<int>("target_reset_ms", 300)),
-			auto_fire_(declare_parameter<bool>("auto_fire", true)),
+				declare_parameter<double>("lead_center_scale_min", 0.3)),  // 中心最小保留比例；调小中心更稳但跟随更慢。
+			kf_sigma_a_(declare_parameter<double>("kf_sigma_a", 80.0)),  // KF过程噪声(加速度)；调大更灵敏，调小更平滑。
+			kf_sigma_z_(declare_parameter<double>("kf_sigma_z", 0.1)),  // KF测量噪声；调大更依赖预测，调小更跟随检测框。
+			target_reset_ms_(declare_parameter<int>("target_reset_ms", 100)),  // 丢目标后恢复开火等待(ms)；调大更谨慎，调小恢复更快。
+			auto_fire_(declare_parameter<bool>("auto_fire", true)),  // 自动开火开关；false 时只转向不发火。
 			last_fire_time_(0, 0, RCL_ROS_TIME),
 			last_target_lost_time_(0, 0, RCL_ROS_TIME),
 			last_yaw_send_time_(0, 0, RCL_STEADY_TIME),
@@ -129,14 +129,15 @@ class AutoAimNode : public ImageProcessorNode {
 		const double bullet_speed = std::max(1.0, bullet_speed_px_s_);
 		const double latency_comp_s = std::max(0.0, lead_time_s_);
 		std::vector<cv::Point2f> all_lead_points;
+		std::vector<int> all_lead_track_ids;
 		std::unordered_map<int, cv::Point2f> lead_point_by_track;
+		std::unordered_map<int, cv::Rect> box_by_track;
 		all_lead_points.reserve(detection.boxes.size());
+		all_lead_track_ids.reserve(detection.boxes.size());
 		lead_point_by_track.reserve(detection.boxes.size());
+		box_by_track.reserve(detection.boxes.size());
 		if (!detection.boxes.empty()) {
-			int earliest_any_track_id = std::numeric_limits<int>::max();
-			bool has_any_target = false;
-			cv::Rect earliest_any_box;
-			cv::Point2f earliest_any_center;
+			int detector_best_track_id = -1;
 
 			for (const auto &box : detection.boxes) {
 				if (box.width <= 0 || box.height <= 0) {
@@ -195,25 +196,34 @@ class AutoAimNode : public ImageProcessorNode {
 				const cv::Point2f lead_point = compensateLeadByY(
 					track->center, raw_lead_point, frame.cols, frame.rows);
 				all_lead_points.push_back(lead_point);
+				all_lead_track_ids.push_back(track_id);
 				lead_point_by_track[track_id] = lead_point;
-
-				const cv::Point2f center_roi(
-					static_cast<float>(box.x + box.width * 0.5f),
-					static_cast<float>(box.y + box.height * 0.5f));
-
-				if (track_id < earliest_any_track_id) {
-					earliest_any_track_id = track_id;
-					earliest_any_box = box;
-					earliest_any_center = center_roi;
-					has_any_target = true;
+				box_by_track[track_id] = box;
+				if (box == detection.bbox) {
+					detector_best_track_id = track_id;
 				}
 			}
 
-			if (has_any_target) {
-				selected_track_id = earliest_any_track_id;
-				selected.bbox = earliest_any_box;
-				selected.center = earliest_any_center;
-				selected.area = static_cast<double>(earliest_any_box.area());
+			// Keep lock on the previous track when it is still visible to avoid
+			// left-right jitter from switching between multiple candidate boxes.
+			if (last_selected_track_id_ >= 0 &&
+				lead_point_by_track.find(last_selected_track_id_) !=
+					lead_point_by_track.end()) {
+				selected_track_id = last_selected_track_id_;
+			} else if (detector_best_track_id >= 0) {
+				selected_track_id = detector_best_track_id;
+			} else if (!all_lead_track_ids.empty()) {
+				selected_track_id = all_lead_track_ids.front();
+			}
+
+			auto selected_box_it = box_by_track.find(selected_track_id);
+			if (selected_box_it != box_by_track.end()) {
+				const cv::Rect &sel_box = selected_box_it->second;
+				selected.bbox = sel_box;
+				selected.center = cv::Point2f(
+					static_cast<float>(sel_box.x + sel_box.width * 0.5f),
+					static_cast<float>(sel_box.y + sel_box.height * 0.5f));
+				selected.area = static_cast<double>(sel_box.area());
 			}
 		}
 
@@ -243,6 +253,7 @@ class AutoAimNode : public ImageProcessorNode {
 
 		if (all_lead_points.empty()) {
 			all_lead_points.push_back(cv::Point2f(x, y));
+			all_lead_track_ids.push_back(selected_track_id);
 		}
 
 		const double travel_px =
@@ -257,7 +268,8 @@ class AutoAimNode : public ImageProcessorNode {
 			lead_point = lead_it->second;
 		}
 		const float lead_x = lead_point.x;
-		maybeSaveDebugImages(frame, crop, selected, &lead_point, &all_lead_points);
+		maybeSaveDebugImages(frame, crop, selected, &lead_point, &all_lead_points,
+									&all_lead_track_ids);
 
 		const float norm = (lead_x - x_center) / x_center;
 		const float yaw_body =

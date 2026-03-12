@@ -191,7 +191,8 @@ bool ImageProcessorNode::buildImageContext(
 void ImageProcessorNode::maybeSaveDebugImages(
   const cv::Mat &frame, const cv::Rect &crop,
   const DetectionResult &detection, const cv::Point2f *aim_point,
-  const std::vector<cv::Point2f> *all_aim_points) {
+  const std::vector<cv::Point2f> *all_aim_points,
+  const std::vector<int> *all_aim_track_ids) {
   std::vector<cv::Rect> detection_rects;
   detection_rects.reserve(detection.boxes.size());
   for (const auto &box : detection.boxes) {
@@ -252,7 +253,12 @@ void ImageProcessorNode::maybeSaveDebugImages(
         cv::circle(img, pi, 4, cv::Scalar(255, 128, 0), 2);
 
         std::ostringstream label;
-        label << "P" << i << "(" << pi.x << "," << pi.y << ")";
+        if (all_aim_track_ids && i < all_aim_track_ids->size()) {
+          label << "T" << (*all_aim_track_ids)[i] << "(" << pi.x << ","
+                << pi.y << ")";
+        } else {
+          label << "P" << i << "(" << pi.x << "," << pi.y << ")";
+        }
         cv::putText(img, label.str(),
                     cv::Point(pi.x + 6, std::max(20, pi.y - 6)),
                     cv::FONT_HERSHEY_SIMPLEX, 0.45,
